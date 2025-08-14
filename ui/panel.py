@@ -12,3 +12,9 @@ def pop_menu(self: bpy.types.Menu, context: bpy.types.Context):
     layout = self.layout
     if context.area.show_menus:
         layout.popover(BP_MainPanel.bl_idname, text="Better Playblast")
+
+def register():
+    bpy.types.VIEW3D_MT_editor_menus.append(pop_menu)
+
+def unregister():
+    bpy.types.VIEW3D_MT_editor_menus.remove(pop_menu)

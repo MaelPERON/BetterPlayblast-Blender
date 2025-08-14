@@ -1,2 +1,2 @@
 # BetterPlayblast-Blender
-Blender addon integrating BetterPlaybast
+Blender addon integrating BetterPlayblast

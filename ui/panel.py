@@ -1,4 +1,7 @@
 import bpy
+
+from . import pop_panel_decorator
+
 class BP_MainPanel(bpy.types.Panel):
     bl_label = "Better Playblast"
     bl_idname = "PLAYBLAST_PT_BetterPlayblast"
@@ -8,10 +11,9 @@ class BP_MainPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
 
-def pop_panel(self: bpy.types.Menu, context: bpy.types.Context):
-    layout = self.layout
-    if context.area.show_menus:
-        layout.popover(BP_MainPanel.bl_idname, text="Better Playblast")
+@pop_panel_decorator(BP_MainPanel.bl_idname)
+def pop_panel(): pass
+
 
 def register():
     bpy.types.VIEW3D_MT_editor_menus.append(pop_panel)

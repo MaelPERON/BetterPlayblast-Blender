@@ -3,5 +3,5 @@ from pathlib import Path
 
 from .BetterPlayblast.install import all_installed, missing_packages
 
-def is_installed() -> bool:
+def packages_installed() -> bool:
 	return all_installed()

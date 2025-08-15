@@ -1,10 +1,7 @@
 import bpy
 from pathlib import Path
 
-from .BetterPlayblast.install import all_installed, missing_packages
+from .BetterPlayblast.install import all_installed
 
 def packages_installed() -> bool:
 	return all_installed()
-
-def missing_packages() -> list[str]:
-	return missing_packages()

@@ -3,6 +3,15 @@ import bpy.utils.previews as previews
 
 preview_collections = {}
 
+def get_icon(name: str) -> int:
+	"""Get the icon ID for a given icon name."""
+	if "main" not in preview_collections:
+		return 0
+	icon = preview_collections["main"].get(name, None)
+	if not icon:
+		print(f"Icon '{name}' not found.")
+	return getattr(icon, "icon_id", 0)
+
 def register():
 	preview_collection = previews.new()
 	preview_collections["main"] = preview_collection

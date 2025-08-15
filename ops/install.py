@@ -26,8 +26,14 @@ class InstallMissingPackages(bpy.types.Operator):
 		# Install missing packages (targeting the blender app site-packages)
 		args = [PYTHON, '-m', 'pip', 'install', '--target', str(SITE_PACKAGES), *packages]
 		print(f"Running command: {' '.join(args)}")
-		run(args)
-		
+		proc = run(args)
+		try:
+			proc.check_returncode()
+		except CalledProcessError as e:
+			self.report({'ERROR'}, str(e))
+			self.report({'ERROR'}, f"Failed to install packages.")
+			return {'CANCELLED'}
+
 		# User Feedback
 		self.report({'INFO'}, f"Installed packages: {packages}. Restart Blender to apply changes.")
 		return {'FINISHED'}

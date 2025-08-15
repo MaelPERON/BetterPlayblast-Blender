@@ -11,7 +11,7 @@ class BP_MainPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
 
-@pop_panel_decorator(BP_MainPanel.bl_idname)
+@pop_panel_decorator(BP_MainPanel.bl_idname, icon="logo")
 def pop_panel(): pass
 
 

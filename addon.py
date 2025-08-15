@@ -5,3 +5,6 @@ from .BetterPlayblast.install import all_installed, missing_packages
 
 def packages_installed() -> bool:
 	return all_installed()
+
+def missing_packages() -> list[str]:
+	return missing_packages()

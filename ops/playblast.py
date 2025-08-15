@@ -1,4 +1,5 @@
 import bpy
+from pathlib import Path
 from ..BetterPlayblast.install import all_installed
 
 Playblast = None
@@ -20,7 +21,14 @@ class BP_Playblast(bpy.types.Operator):
 		if Playblast is None:
 			self.report({'ERROR'}, "Better Playblast is not installed or not available.")
 			return {'CANCELLED'}
-		
-		playblast = Playblast(context)
-		playblast.execute()
+
+		# Configure path local_app_data
+		local_app_data = Path(os.getenv('LOCALAPPDATA', '')) # not compatible with non-Windows OS
+		if not local_app_data.exists():
+			self.report({'ERROR'}, "Local App Data path does not exist.")
+			return {'CANCELLED'}
+
+		temp_folder = local_app_data / "BetterPlayblast" / "temp"
+		if not temp_folder.exists():
+			temp_folder.mkdir(parents=True, exist_ok=True)
 		return {'FINISHED'}

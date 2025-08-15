@@ -47,4 +47,7 @@ class BP_Playblast(bpy.types.Operator):
 		context.scene.render.filepath = str(video_filepath)
 		override_render_settings(context)
 
+		# Capturing the data
+		data = data_init_capture(context)
+
 		return {'FINISHED'}

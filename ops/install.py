@@ -1,7 +1,7 @@
 import bpy
 import sys
 from pathlib import Path
-from subprocess import run
+from subprocess import CalledProcessError, run
 
 from ..addon import packages_installed
 from ..BetterPlayblast.install import missing_packages

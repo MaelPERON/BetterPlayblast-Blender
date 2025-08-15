@@ -16,7 +16,7 @@ class InstallMissingPackages(bpy.types.Operator):
 	bl_options = {'REGISTER', 'UNDO'}
 
 	def execute(self, context) -> set[str]:
-		packages = missing_packages()
+		packages = missing_packages(save_cache=False)
 
 		# In case they're already installed (encourager the user to restart -> better UX)
 		if len(packages) == 0:

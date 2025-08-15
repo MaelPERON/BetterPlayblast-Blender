@@ -1,6 +1,11 @@
 import bpy
+import sys
+from pathlib import Path
 
 from ..addon import packages_installed, missing_packages
+
+PYTHON = sys.executable
+SITE_PACKAGES = Path(PYTHON).parent.parent / "lib" / "site-packages"
 
 class InstallMissingPackages(bpy.types.Operator):
 	bl_idname = "bp.install_missing_packages"

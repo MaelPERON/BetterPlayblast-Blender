@@ -1,6 +1,7 @@
 import bpy
 
 from . import pop_panel_decorator
+from ..addon import packages_installed
 from ..ops.install import InstallMissingPackages
 
 class BP_MainPanel(bpy.types.Panel):
@@ -9,8 +10,10 @@ class BP_MainPanel(bpy.types.Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'WINDOW'
 
-    def draw(self, context):
+    def draw(self, context: bpy.types.Context):
         layout = self.layout
+        if not packages_installed():
+            self.draw_install(context, layout)
 
     def draw_install(self, context: bpy.types.Context, layout: bpy.types.UILayout):
         box = layout.box()

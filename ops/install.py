@@ -1,8 +1,10 @@
 import bpy
 import sys
 from pathlib import Path
+from subprocess import run
 
-from ..addon import packages_installed, missing_packages
+from ..addon import packages_installed
+from ..BetterPlayblast.install import missing_packages
 
 PYTHON = sys.executable
 SITE_PACKAGES = Path(PYTHON).parent.parent / "lib" / "site-packages"
@@ -14,7 +16,11 @@ class InstallMissingPackages(bpy.types.Operator):
 	bl_options = {'REGISTER', 'UNDO'}
 
 	def execute(self, context) -> set[str]:
-		# TODO : Implement the installation process
+		packages = missing_packages()
+		args = [PYTHON, '-m', 'pip', 'install', '--target', str(SITE_PACKAGES), *packages]
+		print(f"Running command: {' '.join(args)}")
+		run(args)
+		self.report({'INFO'}, f"Installed packages: {packages}")
 		return {'FINISHED'}
 	
 	@classmethod

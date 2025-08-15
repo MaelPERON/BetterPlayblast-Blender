@@ -1,7 +1,7 @@
 import bpy
 import os
 from pathlib import Path
-from ..utils.playblast import *
+from ..utils.render_settings import *
 from ..BetterPlayblast.install import all_installed
 
 Playblast = None

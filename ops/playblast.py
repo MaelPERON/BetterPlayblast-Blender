@@ -1,7 +1,7 @@
 import bpy
 import os
-import pickle
 from pathlib import Path
+from ..utils.playblast import save_render_settings
 from ..BetterPlayblast.install import all_installed
 
 Playblast = None
@@ -36,26 +36,7 @@ class BP_Playblast(bpy.types.Operator):
 
 		# Save all current render settings
 		settings_path = temp_folder / "render_settings.pkl"
-		render_settings = {
-			'filepath': context.scene.render.filepath,
-			'image_settings': {
-				'file_format': context.scene.render.image_settings.file_format,
-				'color_mode': context.scene.render.image_settings.color_mode,
-			},
-			'ffmpeg': {
-				'format': context.scene.render.ffmpeg.format,
-				'codec': context.scene.render.ffmpeg.codec,
-				'gopsize': context.scene.render.ffmpeg.gopsize,
-				'use_max_b_frames': context.scene.render.ffmpeg.use_max_b_frames,
-				'video_bitrate': context.scene.render.ffmpeg.video_bitrate,
-				'maxrate': context.scene.render.ffmpeg.maxrate,
-				'minrate': context.scene.render.ffmpeg.minrate,
-				'buffersize': context.scene.render.ffmpeg.buffersize,
-				'packetsize': context.scene.render.ffmpeg.packetsize,
-				'muxrate': context.scene.render.ffmpeg.muxrate,
-			}
-		}
-		with open(settings_path, "wb") as f: pickle.dump(render_settings, f) # Save .pkl file
+		render_settings = save_render_settings(context, settings_path)
 
 		# H264 in mp4
 		og_filepath = Path(render_settings.get('filepath', 'playblast.mp4'))

@@ -56,4 +56,10 @@ class BP_Playblast(bpy.types.Operator):
 			}
 		}
 		with open(settings_path, "wb") as f: pickle.dump(render_settings, f) # Save .pkl file
+
+		# H264 in mp4
+		og_filepath = Path(render_settings.get('filepath', 'playblast.mp4'))
+		video_filepath = temp_folder / f"{og_filepath.stem}.mp4"
+		json_filepath = temp_folder / f"{og_filepath.stem}.json"
+
 		return {'FINISHED'}

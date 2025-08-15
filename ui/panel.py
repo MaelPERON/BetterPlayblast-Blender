@@ -1,6 +1,7 @@
 import bpy
 
 from . import pop_panel_decorator
+from ..ops.install import InstallMissingPackages
 
 class BP_MainPanel(bpy.types.Panel):
     bl_label = "Better Playblast"
@@ -10,6 +11,18 @@ class BP_MainPanel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
+
+    def draw_install(self, context: bpy.types.Context, layout: bpy.types.UILayout):
+        box = layout.box()
+        row = box.row()
+        row.alert = True
+        col = row.column()
+        col.scale_x = 5
+        col.label(text="Missing packages!", icon='ERROR')
+        col = row.column()
+        col.operator("wm.url_open", text="?").url = "https://example.com/docs" # TODO : replace with actual documentation
+        row = box.row()
+        row.operator(InstallMissingPackages.bl_idname, text=InstallMissingPackages.bl_label, icon='PACKAGE')
 
 @pop_panel_decorator(BP_MainPanel.bl_idname, icon="logo")
 def pop_panel(): pass

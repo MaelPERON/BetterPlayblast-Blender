@@ -34,3 +34,29 @@ def save_render_settings(context: bpy.types.Context, filepath: Path) -> dict[str
 	}
 	with open(filepath, "wb") as f: pickle.dump(render_settings, f) # Save .pkl file
 	return render_settings
+
+def override_render_settings(context: bpy.types.Context):
+	"""Override the render settings for the playblast.
+
+	Args:
+		context (bpy.types.Context): The Blender context.
+	"""
+	is_ntsc = (context.scene.render.fps != 25)
+
+	context.scene.render.image_settings.file_format = "FFMPEG"
+	context.scene.render.image_settings.color_mode = "RGB"
+	context.scene.render.ffmpeg.format = "MPEG4"
+	context.scene.render.ffmpeg.codec = "H264"
+
+	if is_ntsc:
+		context.scene.render.ffmpeg.gopsize = 18
+	else:
+		context.scene.render.ffmpeg.gopsize = 15
+	context.scene.render.ffmpeg.use_max_b_frames = False
+
+	context.scene.render.ffmpeg.video_bitrate = 6000
+	context.scene.render.ffmpeg.maxrate = 9000
+	context.scene.render.ffmpeg.minrate = 0
+	context.scene.render.ffmpeg.buffersize = 224 * 8
+	context.scene.render.ffmpeg.packetsize = 2048
+	context.scene.render.ffmpeg.muxrate = 10080000

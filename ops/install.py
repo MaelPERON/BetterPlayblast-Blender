@@ -17,10 +17,19 @@ class InstallMissingPackages(bpy.types.Operator):
 
 	def execute(self, context) -> set[str]:
 		packages = missing_packages()
+
+		# In case they're already installed (encourager the user to restart -> better UX)
+		if len(packages) == 0:
+			self.report({'WARNING'}, "All required packages are already installed. Restart Blender to apply changes.")
+			return {'CANCELLED'}
+
+		# Install missing packages (targeting the blender app site-packages)
 		args = [PYTHON, '-m', 'pip', 'install', '--target', str(SITE_PACKAGES), *packages]
 		print(f"Running command: {' '.join(args)}")
 		run(args)
-		self.report({'INFO'}, f"Installed packages: {packages}")
+		
+		# User Feedback
+		self.report({'INFO'}, f"Installed packages: {packages}. Restart Blender to apply changes.")
 		return {'FINISHED'}
 	
 	@classmethod

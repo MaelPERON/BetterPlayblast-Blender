@@ -13,9 +13,7 @@ class BP_MainPanel(bpy.types.Panel):
     def draw(self, context: bpy.types.Context):
         layout = self.layout
         if not packages_installed():
-            return self.draw_install(context, layout)
-        
-        layout.label(text="Ready to use!", icon='FAKE_USER_ON')
+            self.draw_install(context, layout)
 
     def draw_install(self, context: bpy.types.Context, layout: bpy.types.UILayout):
         box = layout.box()

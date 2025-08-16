@@ -3,6 +3,7 @@ import os
 import json
 from pathlib import Path
 from functools import partial
+from ..utils import reload_pyppeteer
 from ..utils.render_settings import *
 from ..utils.capture_data import *
 from ..utils.time import get_now
@@ -73,6 +74,7 @@ class BP_Playblast(bpy.types.Operator):
 		# Restoring render settings
 		restore_render_settings(context, render_settings=render_settings)
 
+		reload_pyppeteer()
 		pb = Playblast(video_filepath, json_filepath, metadatas=[MList.DATE, MList.FILE])
 		rendered_video = pb.render(preview=self.preview_process)
 

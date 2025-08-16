@@ -2,6 +2,7 @@ import bpy
 import os
 from pathlib import Path
 from ..utils.render_settings import *
+from ..utils.handlers import remove_function_from_handler
 from ..BetterPlayblast.install import all_installed
 
 Playblast = None
@@ -49,5 +50,8 @@ class BP_Playblast(bpy.types.Operator):
 
 		# Capturing the data
 		data = data_init_capture(context)
+
+		handler = bpy.app.handlers.frame_change_post
+		remove_function_from_handler(data_frame_capture, handler)
 
 		return {'FINISHED'}

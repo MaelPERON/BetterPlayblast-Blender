@@ -9,7 +9,7 @@ from ..BetterPlayblast.install import missing_packages
 PYTHON = sys.executable
 SITE_PACKAGES = Path(PYTHON).parent.parent / "lib" / "site-packages"
 
-class InstallMissingPackages(bpy.types.Operator):
+class BP_PackageInstaller(bpy.types.Operator):
 	bl_idname = "bp.install_missing_packages"
 	bl_label = "Install Missing Packages"
 	bl_description = "Install the required packages for Better Playblast.\n*This may cause blender to freeze.*\n(Open the console first to see the installation progress)"

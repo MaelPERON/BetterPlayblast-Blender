@@ -21,6 +21,8 @@ class BP_Playblast(bpy.types.Operator):
 	bl_description = "Create a playblast with Better Playblast"
 	bl_options = {'REGISTER'}
 
+	preview_process: bpy.props.BoolProperty(name="Preview Process", description="Display the video overlay preview when building it.", default=False) # type: ignore
+
 	@classmethod
 	def poll(cls, context: bpy.types.Context):
 		return Playblast is not None
@@ -71,7 +73,7 @@ class BP_Playblast(bpy.types.Operator):
 		restore_render_settings(context, render_settings=render_settings)
 
 		pb = Playblast(video_filepath, json_filepath, metadatas=[MList.DATE, MList.FILE])
-		rendered_video = pb.render()
+		rendered_video = pb.render(preview=self.preview_process)
 
 		og_filepath.parent.mkdir(parents=True, exist_ok=True)
 		if og_filepath.exists():

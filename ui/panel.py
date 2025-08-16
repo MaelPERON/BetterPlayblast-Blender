@@ -3,7 +3,7 @@ import bpy
 from . import pop_panel_decorator
 from ..addon import packages_installed
 from ..icons import get_icon
-from ..ops.install import InstallMissingPackages
+from ..ops.install import BP_PackageInstaller
 from ..ops.playblast import BP_Playblast
 
 class BP_MainPanel(bpy.types.Panel):
@@ -31,7 +31,7 @@ class BP_MainPanel(bpy.types.Panel):
         col = row.column()
         col.operator("wm.url_open", text="?").url = "https://example.com/docs" # TODO : replace with actual documentation
         row = box.row()
-        row.operator(InstallMissingPackages.bl_idname, text=InstallMissingPackages.bl_label, icon='PACKAGE')
+        row.operator(BP_PackageInstaller.bl_idname, text=BP_PackageInstaller.bl_label, icon='PACKAGE')
 
 @pop_panel_decorator(BP_MainPanel.bl_idname, icon="logo")
 def pop_panel(): pass

@@ -3,6 +3,7 @@ import os
 import json
 from pathlib import Path
 from functools import partial
+from ..utils import reload_pyppeteer
 from ..utils.render_settings import *
 from ..utils.capture_data import *
 from ..utils.time import get_now
@@ -65,6 +66,7 @@ class BP_Playblast(bpy.types.Operator):
 
 		# Write video file
 		bpy.ops.render.opengl(animation=True)
+		remove_function_from_handler(data_frame_capture, handler)
 		# Write JSON file
 		with open(json_filepath, 'w') as f:
 			json.dump(data, f, indent=4)
@@ -72,12 +74,13 @@ class BP_Playblast(bpy.types.Operator):
 		# Restoring render settings
 		restore_render_settings(context, render_settings=render_settings)
 
+		reload_pyppeteer()
 		pb = Playblast(video_filepath, json_filepath, metadatas=[MList.DATE, MList.FILE])
 		rendered_video = pb.render(preview=self.preview_process)
 
 		og_filepath.parent.mkdir(parents=True, exist_ok=True)
 		if og_filepath.exists():
 			og_filepath.unlink()
-		video_filepath.replace(og_filepath)
+		rendered_video.replace(og_filepath)
 
 		return {'FINISHED'}

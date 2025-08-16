@@ -65,6 +65,7 @@ def iter_submodule_names(path, root=""):
         if is_package:
             sub_path = path / module_name
             sub_root = root + module_name + "."
+            if module_name == "BetterPlayblast": continue
             yield from iter_submodule_names(sub_path, sub_root)
         else:
             yield root + module_name

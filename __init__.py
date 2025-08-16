@@ -22,13 +22,9 @@ bl_info = {
     "category": "Generic",
 }
 
-import os
-os.putenv("PYPPETEER_CHROMIUM_REVISION", "1230501")
-import pyppeteer.chromium_downloader as pyppeteer_downloader
-from importlib import reload
-reload(pyppeteer_downloader)
-
 from . import auto_load
+from .utils import reload_pyppeteer
+reload_pyppeteer()
 
 auto_load.init()
 

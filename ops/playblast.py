@@ -67,4 +67,13 @@ class BP_Playblast(bpy.types.Operator):
 
 		# Restoring render settings
 		restore_render_settings(context, render_settings=render_settings)
+
+		pb = Playblast(video_filepath, json_filepath, metadatas=[MList.DATE, MList.FILE])
+		rendered_video = pb.render()
+
+		og_filepath.parent.mkdir(parents=True, exist_ok=True)
+		if og_filepath.exists():
+			og_filepath.unlink()
+		video_filepath.replace(og_filepath)
+
 		return {'FINISHED'}

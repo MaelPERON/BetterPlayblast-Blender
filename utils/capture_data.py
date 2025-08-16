@@ -66,4 +66,15 @@ def data_frame_capture(data: dict, last_check_time: datetime, scene: bpy.types.S
 	markers = [m for m in scene.timeline_markers if m.frame <= scene.frame_current]
 	active_marker = next(reversed(markers), None)
 
+	data["frames"].append({
+		"frame": scene.frame_current,
+		"timecode": time.get_timecode_from_frame(scene.frame_current, data.get("frame_start", 1)),
+		"memory": memory_mb,
+		"camera": camera.name,
+		"lens": lens,
+		"marker": active_marker.name if active_marker else "",
+		"num_threads": num_threads,
+		"render_time": diff
+	})
+
 	return data

@@ -25,6 +25,9 @@ def data_init_capture(context: bpy.types.Context) -> dict:
 	data = {
 		"frames": [],
 		"frame_range": f"{frame_start}:{frame_end}{step_suffix}",
+		"frame_start": frame_start,
+		"frame_end": frame_end,
+		"frame_step": frame_step,
 		"fps": fps,
 		"hostname": os.uname().nodename if hasattr(os, "uname") else os.environ.get("COMPUTERNAME", ""),
 		"user": os.environ.get("USERNAME", ""),

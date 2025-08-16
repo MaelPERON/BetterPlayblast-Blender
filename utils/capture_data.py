@@ -49,4 +49,11 @@ def data_frame_capture(data: dict, last_check_time: datetime, scene: bpy.types.S
 	Returns:
 		dict: The updated data dictionary.
 	"""
+
+	""" MEMORY USAGE """
+	process = psutil.Process()
+	mem_info = process.memory_info()
+	num_threads = process.num_threads()
+	memory_mb = mem_info.rss / (1024 * 1024)
+
 	return data

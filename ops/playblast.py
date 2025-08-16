@@ -65,4 +65,6 @@ class BP_Playblast(bpy.types.Operator):
 		with open(json_filepath, 'w') as f:
 			json.dump(data, f, indent=4)
 
+		# Restoring render settings
+		restore_render_settings(context, render_settings=render_settings)
 		return {'FINISHED'}

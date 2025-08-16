@@ -43,7 +43,7 @@ class BP_Playblast(bpy.types.Operator):
 		render_settings = save_render_settings(context, settings_path)
 
 		# H264 in mp4
-		og_filepath = Path(render_settings.get('filepath', 'playblast.mp4'))
+		og_filepath = Path(render_settings.get('filepath', 'C:/tmp/playblast.mp4'))
 		video_filepath = temp_folder / f"{og_filepath.stem}.mp4"
 		json_filepath = temp_folder / f"{og_filepath.stem}.json"
 

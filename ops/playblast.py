@@ -79,6 +79,6 @@ class BP_Playblast(bpy.types.Operator):
 		og_filepath.parent.mkdir(parents=True, exist_ok=True)
 		if og_filepath.exists():
 			og_filepath.unlink()
-		video_filepath.replace(og_filepath)
+		rendered_video.replace(og_filepath)
 
 		return {'FINISHED'}

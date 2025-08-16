@@ -4,6 +4,7 @@ from pathlib import Path
 from functools import partial
 from ..utils.render_settings import *
 from ..utils.capture_data import *
+from ..utils.time import get_now
 from ..utils.handlers import remove_function_from_handler
 from ..BetterPlayblast.install import all_installed
 

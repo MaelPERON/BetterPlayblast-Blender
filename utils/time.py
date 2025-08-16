@@ -1,5 +1,13 @@
 from datetime import datetime
 
+def get_now() -> datetime:
+	"""Get the current time as a datetime object.
+
+	Returns:
+		datetime: The current time.
+	"""
+	return datetime.now()
+
 def get_current_time(days: bool = True) -> str:
 	"""Get the current time as a formatted string.
 

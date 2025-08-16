@@ -56,4 +56,14 @@ def data_frame_capture(data: dict, last_check_time: datetime, scene: bpy.types.S
 	num_threads = process.num_threads()
 	memory_mb = mem_info.rss / (1024 * 1024)
 
+	""" RENDER TIME """
+	now = time.get_now()
+	diff = (now - last_check_time).total_seconds()
+
+	""" BLENDER INFOS """
+	camera = scene.camera
+	lens = camera.data.lens
+	markers = [m for m in scene.timeline_markers if m.frame <= scene.frame_current]
+	active_marker = next(reversed(markers), None)
+
 	return data

@@ -19,19 +19,26 @@ class InstallMissingPackages(bpy.types.Operator):
 		packages = missing_packages(save_cache=False)
 
 		# In case they're already installed (encourager the user to restart -> better UX)
-		if len(packages) == 0:
+		if len(packages) != 0:
+			# Install missing packages (targeting the blender app site-packages)
+			args = [PYTHON, '-m', 'pip', 'install', '--target', str(SITE_PACKAGES), *packages]
+			print(f"Running command: {' '.join(args)}")
+			proc = run(args)
+			try:
+				proc.check_returncode()
+			except CalledProcessError as e:
+				self.report({'ERROR'}, str(e))
+				self.report({'ERROR'}, f"Failed to install packages.")
+				return {'CANCELLED'}
+		else:
 			self.report({'WARNING'}, "All required packages are already installed. Restart Blender to apply changes.")
-			return {'CANCELLED'}
 
-		# Install missing packages (targeting the blender app site-packages)
-		args = [PYTHON, '-m', 'pip', 'install', '--target', str(SITE_PACKAGES), *packages]
-		print(f"Running command: {' '.join(args)}")
-		proc = run(args)
+		pyppeteer_install = run("pyppeteer-install")
 		try:
-			proc.check_returncode()
+			pyppeteer_install.check_returncode()
 		except CalledProcessError as e:
 			self.report({'ERROR'}, str(e))
-			self.report({'ERROR'}, f"Failed to install packages.")
+			self.report({'ERROR'}, f"Failed to install pyppeteer.")
 			return {'CANCELLED'}
 
 		# User Feedback

@@ -22,6 +22,9 @@ bl_info = {
     "category": "Generic",
 }
 
+import os
+os.putenv("PYPPETEER_CHROMIUM_REVISION", "1230501")
+
 from . import auto_load
 
 auto_load.init()

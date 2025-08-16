@@ -65,6 +65,7 @@ class BP_Playblast(bpy.types.Operator):
 
 		# Write video file
 		bpy.ops.render.opengl(animation=True)
+		remove_function_from_handler(data_frame_capture, handler)
 		# Write JSON file
 		with open(json_filepath, 'w') as f:
 			json.dump(data, f, indent=4)

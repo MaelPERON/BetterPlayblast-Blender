@@ -1,6 +1,7 @@
 import bpy
 import os
 from . import time
+from datetime import datetime
 
 def data_init_capture(context: bpy.types.Context) -> dict:
 	"""Initialize data capture for the playblast.
@@ -34,4 +35,18 @@ def data_init_capture(context: bpy.types.Context) -> dict:
 		"software": "blender",
 		"icon": "blender"
 	}
+	return data
+
+def data_frame_capture(data: dict, last_check_time: datetime, scene: bpy.types.Scene, depsgraph: bpy.types.Depsgraph) -> dict:
+	"""Capture data for the current frame.
+
+	Args:
+		data (dict): The data dictionary to update.
+		last_check_time (datetime): The last time the data was checked.
+		scene (bpy.types.Scene): The current Blender scene.
+		depsgraph (bpy.types.Depsgraph): The current Blender dependency graph.
+
+	Returns:
+		dict: The updated data dictionary.
+	"""
 	return data

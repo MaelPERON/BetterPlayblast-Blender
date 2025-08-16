@@ -1,7 +1,9 @@
 import bpy
 import os
 from pathlib import Path
+from functools import partial
 from ..utils.render_settings import *
+from ..utils.capture_data import *
 from ..utils.handlers import remove_function_from_handler
 from ..BetterPlayblast.install import all_installed
 
@@ -53,5 +55,7 @@ class BP_Playblast(bpy.types.Operator):
 
 		handler = bpy.app.handlers.frame_change_post
 		remove_function_from_handler(data_frame_capture, handler)
+
+		handler.append(partial(data_frame_capture, data, get_now()))
 
 		return {'FINISHED'}

@@ -52,11 +52,17 @@ class BP_Playblast(bpy.types.Operator):
 		override_render_settings(context)
 
 		# Capturing the data
+		## Initial data capture
 		data = data_init_capture(context)
-
+		## Frame dependent capture
 		handler = bpy.app.handlers.frame_change_post
 		remove_function_from_handler(data_frame_capture, handler)
-
 		handler.append(partial(data_frame_capture, data, get_now()))
+
+		# Write video file
+		bpy.ops.render.opengl(animation=True)
+		# Write JSON file
+		with open(json_filepath, 'w') as f:
+			json.dump(data, f, indent=4)
 
 		return {'FINISHED'}

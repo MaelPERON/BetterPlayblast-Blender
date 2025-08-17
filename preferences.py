@@ -2,6 +2,7 @@ from re import sub
 import bpy
 import os
 from pathlib import Path
+from .utils.sanity_checks import *
 
 class BP_Preferences(bpy.types.AddonPreferences):
 	bl_idname = __package__ or "BetterPlayblast-Blender"

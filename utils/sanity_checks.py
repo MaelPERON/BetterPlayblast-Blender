@@ -23,4 +23,4 @@ class SanityCheck:
 
 
 sanity_file_saved = SanityCheck(lambda file: file != "", "Blend file not saved")
-sanity_file_exists = SanityCheck(lambda file: Path(file).resolve().exists(), f"File does not exist: {{file}}")
+sanity_file_exists = SanityCheck(lambda file: (Path(file) if not isinstance(file, Path) else file).resolve().exists(), f"Path not valid")

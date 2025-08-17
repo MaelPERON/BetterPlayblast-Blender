@@ -120,12 +120,24 @@ class BP_Preferences(bpy.types.AddonPreferences):
 
 		self.pb_filename_blender = bpy.path.basename(bpy.data.filepath) or "playblast"
 		self.pb_filename_render = bpy.path.basename(context.scene.render.filepath) or "playblast"
+		filename = None
 		match self.pb_filename:
 			case "FILE_NAME":
 				sub_row.prop(self, "pb_filename_blender", text="")
 				if not sanity_file_saved.check(bpy.data.filepath):
 					spawn_error(col, "Blend file not saved")
+				
+				filename = self.pb_filename_blender
 			case "RENDER":
 				sub_row.prop(self, "pb_filename_render", text="")
+				filename = self.pb_filename_render or None
 			case "CUSTOM":
 				sub_row.prop(self, "pb_filename_custom", text="")
+				filename = self.pb_filename_custom or None
+
+		if filename is None:
+			spawn_error(col, "Filename is empty")
+		else:
+			valid, msg = sanity_file_stem.check_and_report(filename)
+			if not valid:
+				spawn_error(col, msg)

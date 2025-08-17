@@ -101,7 +101,14 @@ class BP_Preferences(bpy.types.AddonPreferences):
 				folder = filepath
 			case "CUSTOM":
 				sub_row.prop(self, "pb_folder_custom", text="")
-				folder = Path(self.pb_folder_custom)
+				folder = Path(self.pb_folder_custom) if self.pb_folder_custom else None
+
+		if folder is not None:
+			valid, msg = sanity_file_exists.check_and_report(folder)
+			if not valid:
+				spawn_warning(col, f"Missing folder '{folder}'")
+		else:
+			spawn_error(col, "Folder path is empty")
 
 		# Playblast Filename
 		col = box.column(align=True)

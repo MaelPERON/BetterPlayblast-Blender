@@ -82,14 +82,26 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		row.prop(self, "pb_folder")
 		sub_row = row.row(align=True)
 		sub_row.enabled = self.pb_folder != "RENDER"
+		folder = None
 		match self.pb_folder:
 			case "RELATIVE":
 				sub_row.prop(self, "pb_folder_relative", text="")
+				filepath = bpy.data.filepath
+				if not sanity_file_saved.check(filepath):
+					spawn_error(col, "Blend file not saved")
+					folder = None
+				else:
+					folder = Path(filepath) / self.pb_folder_relative
+
 			case "RENDER":
-				self.pb_folder_render = str(filepath) if (filepath := Path(context.scene.render.filepath).parent).exists() else ""
+				filepath = Path(context.scene.render.filepath)
+				self.pb_folder_render = str(filepath) if filepath.parent.exists() else ""
 				sub_row.prop(self, "pb_folder_render", text="")
+
+				folder = filepath
 			case "CUSTOM":
 				sub_row.prop(self, "pb_folder_custom", text="")
+				folder = Path(self.pb_folder_custom)
 
 		# Playblast Filename
 		col = box.column(align=True)

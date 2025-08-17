@@ -121,4 +121,4 @@ class BP_Preferences(bpy.types.AddonPreferences):
 			case "RENDER":
 				sub_row.prop(self, "pb_filename_render", text="")
 			case "CUSTOM":
-				row.prop(self, "pb_filename_custom", text="")
+				sub_row.prop(self, "pb_filename_custom", text="")

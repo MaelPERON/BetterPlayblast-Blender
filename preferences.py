@@ -3,7 +3,7 @@ import bpy
 import os
 from pathlib import Path
 
-from .ui import spawn_error
+from .ui import spawn_error, spawn_warning
 from .utils.sanity_checks import *
 
 class BP_Preferences(bpy.types.AddonPreferences):

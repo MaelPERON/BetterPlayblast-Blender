@@ -21,9 +21,9 @@ def pop_panel_decorator(idname, text: str = None, icon: str = None):
 def spawn_error(layout: bpy.types.UILayout, message: str):
 	row = layout.row(align=True)
 	row.alert = True
-	row.label(text=message, icon="ERROR")
+	row.label(text=f"error: {message}", icon="ERROR")
 
 def spawn_warning(layout: bpy.types.UILayout, message: str):
 	row = layout.row(align=True)
 	row.alert = True
-	row.label(text=message, icon="WARNING_LARGE")
+	row.label(text=f"warning: {message}", icon="WARNING_LARGE")

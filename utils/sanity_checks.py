@@ -13,7 +13,11 @@ class SanityCheck:
 		if not self.check_function:
 			return True, None
 
-		return (self.check_function(value, *args, **kwargs), self.error_message)
-	
+		message = self.error_message
+		for key, value in kwargs.items():
+			message = message.replace(f"${{{key}}}", str(value))
+
+		return (self.check_function(value, *args, **kwargs), message)
+
 
 sanity_file_saved = SanityCheck(lambda file: file != "", "Blend file not saved")

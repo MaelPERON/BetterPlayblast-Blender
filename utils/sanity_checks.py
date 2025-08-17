@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 class SanityCheck:
 	def __init__(self, check_function: callable = None, error_message: str = None):
@@ -22,5 +23,12 @@ class SanityCheck:
 		return (self.check_function(value, *args, **kwargs), message)
 
 
+# FILE SANITY CHECKS
 sanity_file_saved = SanityCheck(lambda file: file != "", "Blend file not saved")
 sanity_file_exists = SanityCheck(lambda file: (Path(file) if not isinstance(file, Path) else file).resolve().exists(), f"Path not valid")
+
+def valid_file_stem(stem: str) -> bool:
+	if not stem.strip(): return False
+	pattern = r'^(?!.*[\\/:*?"<>|])[^. ].*[^. ]$'
+	return bool(re.match(pattern, stem))
+sanity_file_stem = SanityCheck(lambda stem: valid_file_stem(stem), "Window stem is invalid")

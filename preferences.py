@@ -141,3 +141,32 @@ class BP_Preferences(bpy.types.AddonPreferences):
 			valid, msg = sanity_file_stem.check_and_report(filename)
 			if not valid:
 				spawn_error(col, msg)
+
+	def get_filename(self) -> str | None:
+		match self.pb_filename:
+			case "FILE_NAME":
+				filepath = bpy.data.filepath
+				return bpy.path.basename(filepath) if filepath else None
+			case "RENDER":
+				scene = bpy.context.scene
+				return bpy.path.basename(scene.render.filepath) or None
+			case "CUSTOM":
+				return self.pb_filename_custom
+			case _:
+				return None
+			
+	def get_folder(self) -> str | None:
+		match self.pb_folder:
+			case "RELATIVE":
+				filepath = bpy.data.filepath or None
+				if not filepath: return None
+				return Path(filepath).parent / self.pb_folder_relative
+			case "RENDER":
+				scene = bpy.context.scene
+				filepath = scene.render.filepath or None
+				if not filepath: return None
+				return str(Path(filepath).parent)
+			case "CUSTOM":
+				return self.pb_folder_custom
+			case _:
+				return None

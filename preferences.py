@@ -85,6 +85,8 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		layout = self.layout
 		# Pre-checks
 		saved = sanity_file_saved.check(bpy.data.filepath)
+		scene = bpy.context.scene
+		render = scene.render
 
 		
 		# region PLAYBLAST SETTINGS
@@ -180,6 +182,26 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		# endregion
 
 		# endregion PLAYBLAST SETTINGS
+
+		# region VIDEO SETTINGS
+		box = layout.box()
+		box.label(text="Video Settings", icon="FILE_MOVIE")
+		spawn_warning(box, "Video Codec not supported for the moment. Default to .MPEG-4")
+		box.separator()
+		col = box.column(align=True)
+
+		# region VIDEO / AUDIO Codecs
+		video = col.row(align=True)
+		video.enabled = False
+		video.prop(render.ffmpeg, "format", text="Video Format")
+		sub_row = video.row(align=True)
+		sub_row.alert = True
+		
+		col.prop(render.ffmpeg, "audio_codec", text="Audio Codec")
+
+		# endregion
+
+		# endregion VIDEO SETTINGS
 
 	def get_filename(self) -> str | None:
 		match self.pb_filename:

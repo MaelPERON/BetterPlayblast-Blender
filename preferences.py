@@ -78,7 +78,7 @@ class BP_Preferences(bpy.types.AddonPreferences):
 
 		# Playblast Folder
 		col = box.column(align=True)
-		row = col.row(align=True)
+		row = col.row().split(align=True, factor=0.6)
 		row.prop(self, "pb_folder")
 		sub_row = row.row(align=True)
 		sub_row.enabled = self.pb_folder != "RENDER"
@@ -105,7 +105,7 @@ class BP_Preferences(bpy.types.AddonPreferences):
 
 		# Playblast Filename
 		col = box.column(align=True)
-		row = col.row(align=True)
+		row = col.row().split(align=True, factor=0.6)
 		row.prop(self, "pb_filename")
 
 		sub_row = row.row(align=True)

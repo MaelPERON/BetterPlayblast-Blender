@@ -201,6 +201,35 @@ class BP_Preferences(bpy.types.AddonPreferences):
 
 		# endregion
 
+		# region ADVANCED
+		col.separator()
+		advanced = col.row().split()
+		# region VIDEO
+		video = advanced.column(align=True)
+		video.label(text="Video Settings")
+		video.separator()
+		video.prop(render.ffmpeg, "gopsize", text="GOP Size")
+		video.prop(render.ffmpeg, "video_bitrate", text="Video Bitrate")
+		video.prop(render.ffmpeg, "maxrate", text="Max Rate")
+		video.prop(render.ffmpeg, "minrate", text="Min Rate")
+		video.prop(render.ffmpeg, "buffersize", text="Buffer Size")
+		video.prop(render.ffmpeg, "packetsize", text="Packet Size")
+		video.prop(render.ffmpeg, "muxrate", text="Mux Rate")
+		# endregion
+		# region AUDIO
+		if ffmpeg.audio_codec != "NONE":
+			audio = advanced.column(align=True)
+			audio.label(text="Audio Settings")
+			audio.separator()
+
+			if ffmpeg.audio_codec != 'NONE':
+				audio.prop(ffmpeg, "audio_channels")
+				audio.prop(ffmpeg, "audio_mixrate", text="Sample Rate")
+				audio.prop(ffmpeg, "audio_bitrate")
+				audio.prop(ffmpeg, "audio_volume", slider=True)
+		# endregion
+		# endregion ADVANCED
+
 		# endregion VIDEO SETTINGS
 
 	def get_filename(self) -> str | None:

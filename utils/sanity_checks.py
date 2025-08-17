@@ -1,3 +1,5 @@
+from pathlib import Path
+
 class SanityCheck:
 	def __init__(self, check_function: callable = None, error_message: str = None):
 		self.check_function = check_function
@@ -21,3 +23,4 @@ class SanityCheck:
 
 
 sanity_file_saved = SanityCheck(lambda file: file != "", "Blend file not saved")
+sanity_file_exists = SanityCheck(lambda file: Path(file).resolve().exists(), f"File does not exist: {{file}}")

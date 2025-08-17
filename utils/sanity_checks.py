@@ -14,3 +14,6 @@ class SanityCheck:
 			return True, None
 
 		return (self.check_function(value, *args, **kwargs), self.error_message)
+	
+
+sanity_file_saved = SanityCheck(lambda file: file != "", "Blend file not saved")

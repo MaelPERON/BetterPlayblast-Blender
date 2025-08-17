@@ -163,9 +163,9 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		if preview_path:
 			col.separator_spacer()
 			row = col.row(align=True)
-			row.enabled = False
+			row.emboss = "NONE"
 			self.pb_path_preview = str(preview_path.resolve())
-			row.prop(self, "pb_path_preview", text="", icon="FOLDER_REDIRECT")
+			row.prop(self, "pb_path_preview", text="Playblast Destination Preview", icon="FOLDER_REDIRECT")
 
 		# endregion
 

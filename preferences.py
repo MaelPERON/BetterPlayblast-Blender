@@ -77,15 +77,17 @@ class BP_Preferences(bpy.types.AddonPreferences):
 
 	def draw(self, context: bpy.types.Context):
 		layout = self.layout
+		# Pre-checks
+		saved = sanity_file_saved.check(bpy.data.filepath)
 
+		
+		# region PLAYBLAST SETTINGS
 		box = layout.box()
 		box.label(text="Playblast Settings", icon="TOOL_SETTINGS")
 		box.separator()
 
-		# Pre-checks
-		saved = sanity_file_saved.check(bpy.data.filepath)
 
-		# region Playblast Folder
+		# region PLAYBLAST FOLDER
 		col = box.column(align=True)
 		row = col.row().split(align=True, factor=0.6)
 		row.prop(self, "pb_folder")
@@ -108,8 +110,10 @@ class BP_Preferences(bpy.types.AddonPreferences):
 			spawn_error(col, "Blend file not saved")
 		elif folder is None:
 			spawn_error(col, "Folder path is empty")
+		
+		# endregion
 
-		# Playblast Filename
+		# region PLAYBLAST FILENAME
 		col = box.column(align=True)
 		row = col.row().split(align=True, factor=0.6)
 		row.prop(self, "pb_filename")
@@ -137,6 +141,9 @@ class BP_Preferences(bpy.types.AddonPreferences):
 			if not valid:
 				spawn_error(col, msg)
 
+		# endregion
+
+		# region PLAYBLAST PATH PREVIEW
 		preview_path = self.get_path()
 		if preview_path:
 			col.separator_spacer()
@@ -146,6 +153,8 @@ class BP_Preferences(bpy.types.AddonPreferences):
 			row.prop(self, "pb_path_preview", text="", icon="FOLDER_REDIRECT")
 
 		# endregion
+
+		# endregion PLAYBLAST SETTINGS
 
 	def get_filename(self) -> str | None:
 		match self.pb_filename:

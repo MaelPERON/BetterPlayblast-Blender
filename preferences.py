@@ -1,6 +1,7 @@
 from re import sub
 import bpy
 import os
+from pathlib import Path
 
 class BP_Preferences(bpy.types.AddonPreferences):
 	bl_idname = __package__ or "BetterPlayblast-Blender"
@@ -12,9 +13,9 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		items=[
 			("RELATIVE", "Relative Folder", "Relative to the .blend file"),
 			("CUSTOM", "Custom Folder", "Select a location"),
-			("SAME", "Output Path", "Same Folder as the Output Path under Render Settings")
+			("RENDER", "Same as Output Path", "Same Folder as the Output Path under Render Settings")
 		],
-		default="RELATIVE"
+		default="RENDER"
 	)
 
 	pb_folder_relative: bpy.props.StringProperty( # type: ignore
@@ -22,6 +23,13 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		description="Set a relative folder for playblasts",
 		default="./Playblast/"
 	)
+
+	pb_folder_render: bpy.props.StringProperty( # type: ignore
+		name="Render Folder",
+		description="Set the render folder for playblasts",
+		default=""
+	)
+
 	pb_folder_custom: bpy.props.StringProperty( # type: ignore
 		name="Custom Folder",
 		description="Set a custom folder for playblasts",
@@ -69,11 +77,16 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		col = box.column(align=True)
 		row = col.row(align=True)
 		row.prop(self, "pb_folder")
+		sub_row = row.row(align=True)
+		sub_row.enabled = self.pb_folder != "RENDER"
 		match self.pb_folder:
 			case "RELATIVE":
-				row.prop(self, "pb_folder_relative", text="")
+				sub_row.prop(self, "pb_folder_relative", text="")
+			case "RENDER":
+				self.pb_folder_render = str(filepath) if (filepath := Path(context.scene.render.filepath).parent).exists() else ""
+				sub_row.prop(self, "pb_folder_render", text="")
 			case "CUSTOM":
-				row.prop(self, "pb_folder_custom", text="")
+				sub_row.prop(self, "pb_folder_custom", text="")
 
 		# Playblast Filename
 		col = box.column(align=True)

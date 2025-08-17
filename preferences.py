@@ -116,6 +116,8 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		match self.pb_filename:
 			case "FILE_NAME":
 				sub_row.prop(self, "pb_filename_blender", text="")
+				if not sanity_file_saved.check(bpy.data.filepath):
+					spawn_error(col, "Blend file not saved")
 			case "RENDER":
 				sub_row.prop(self, "pb_filename_render", text="")
 			case "CUSTOM":

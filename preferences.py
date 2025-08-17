@@ -9,7 +9,7 @@ from .utils.sanity_checks import *
 class BP_Preferences(bpy.types.AddonPreferences):
 	bl_idname = __package__ or "BetterPlayblast-Blender"
 	
-	# PLAYBLAST SETTINGS
+	# region PLAYBLAST SETTINGS
 	pb_folder: bpy.props.EnumProperty( # type: ignore
 		name="Playblast Folder",
 		description="Choose the folder for playblasts",
@@ -80,6 +80,29 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		description="Preview of the playblast output path",
 		default=""
 	)
+
+	# endregion PLAYBLAST SETTINGS
+
+	# region VIDEO SETTINGS
+
+	def get_vs_presets(self, context):
+		items = [
+			("NONE", "None", "Using context render video settings")
+		]
+		ffmpeg_preset_folder = Path(bpy.utils.resource_path("LOCAL")) / "scripts/presets/ffmpeg"
+		if ffmpeg_preset_folder.exists():
+			for preset in ffmpeg_preset_folder.glob("*.py"):
+				name = preset.stem.split("_")[0]
+				items.append((preset.name, preset.stem, f"Load preset at file location: {preset.resolve()}"))
+		return items
+
+	vs_presets: bpy.props.EnumProperty(  # type: ignore
+		name="Video Presets",
+		description="Choose a video settings preset",
+		items=get_vs_presets
+	)
+
+	# endregion VIDEO SETTINGS
 
 	def draw(self, context: bpy.types.Context):
 		layout = self.layout
@@ -191,7 +214,20 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		box.separator()
 		col = box.column(align=True)
 
+		# region PRESETS
+
+		row = col.row().split(align=True, factor=0.6)
+		row.prop(self, "vs_presets")
+		row = col.row()
+		row.enabled = False
+		label = row.label(text="If selected, the video settings will be overriden to the selected ffmpeg preset.")
+		if self.vs_presets != "NONE":
+			spawn_warning(col, "Using a preset will override the video settings below. Make sure to check the preset file for details.")
+
+		# endregion
+
 		# region VIDEO / AUDIO Codecs
+		col.separator_spacer()
 		video = col.row(align=True)
 		video.enabled = False
 		video.prop(render.ffmpeg, "format", text="Video Format")
@@ -207,6 +243,7 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		advanced = col.row().split()
 		# region VIDEO
 		video = advanced.column(align=True)
+		if self.vs_presets != "NONE": video.enabled = False
 		video.label(text="Video Settings")
 		video.separator()
 		video.prop(render.ffmpeg, "gopsize", text="GOP Size")

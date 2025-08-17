@@ -17,3 +17,8 @@ def pop_panel_decorator(idname, text: str = None, icon: str = None):
 			return func()
 		return wrapper
 	return decorator
+
+def spawn_error(layout: bpy.types.UILayout, message: str):
+	row = layout.row(align=True)
+	row.alert = True
+	row.label(text=message, icon="ERROR")

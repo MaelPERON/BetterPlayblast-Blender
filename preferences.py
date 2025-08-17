@@ -2,6 +2,8 @@ from re import sub
 import bpy
 import os
 from pathlib import Path
+
+from .ui import spawn_error
 from .utils.sanity_checks import *
 
 class BP_Preferences(bpy.types.AddonPreferences):

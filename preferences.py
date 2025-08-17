@@ -51,7 +51,7 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		description="Choose the filename for playblasts",
 		items=[
 			("FILE_NAME", "Blender Filename", "Use the Blender filename"),
-			("CUSTOM", "Custom", "Use a custom filename"),
+			("CUSTOM", "Custom Filename", "Use a custom filename"),
 			("RENDER", "Same as Output Path", "Use the same name as the output file")
 		],
 		default="RENDER"

@@ -87,16 +87,17 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		saved = sanity_file_saved.check(bpy.data.filepath)
 		scene = bpy.context.scene
 		render = scene.render
+		ffmpeg = render.ffmpeg
 
 		
 		# region PLAYBLAST SETTINGS
 		box = layout.box()
 		box.label(text="Playblast Settings", icon="TOOL_SETTINGS")
 		box.separator()
+		col = box.column(align=True)
 
 
 		# region PLAYBLAST FOLDER
-		col = box.column(align=True)
 		row = col.row().split(align=True, factor=0.6)
 		row.prop(self, "pb_folder")
 		sub_row = row.row(align=True)

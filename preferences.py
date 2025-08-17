@@ -76,38 +76,31 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		box.label(text="Playblast Settings", icon="TOOL_SETTINGS")
 		box.separator()
 
+		# Pre-checks
+		saved = sanity_file_saved.check(bpy.data.filepath)
+
 		# Playblast Folder
 		col = box.column(align=True)
 		row = col.row().split(align=True, factor=0.6)
 		row.prop(self, "pb_folder")
 		sub_row = row.row(align=True)
 		sub_row.enabled = self.pb_folder != "RENDER"
-		folder = None
 		match self.pb_folder:
 			case "RELATIVE":
 				sub_row.prop(self, "pb_folder_relative", text="")
 				filepath = bpy.data.filepath
-				if not sanity_file_saved.check(filepath):
-					spawn_error(col, "Blend file not saved")
-					folder = None
-				else:
-					folder = Path(filepath).parent / self.pb_folder_relative
 
 			case "RENDER":
 				filepath = Path(context.scene.render.filepath)
 				self.pb_folder_render = str(filepath) if filepath.parent.exists() else ""
 				sub_row.prop(self, "pb_folder_render", text="")
-
-				folder = filepath
 			case "CUSTOM":
 				sub_row.prop(self, "pb_folder_custom", text="")
-				folder = Path(self.pb_folder_custom) if self.pb_folder_custom else None
 
-		if folder is not None:
-			valid, msg = sanity_file_exists.check_and_report(folder)
-			if not valid:
-				spawn_warning(col, f"Missing folder '{folder}'")
-		else:
+		folder = self.get_folder()
+		if not saved:
+			spawn_error(col, "Blend file not saved")
+		elif folder is None:
 			spawn_error(col, "Folder path is empty")
 
 		# Playblast Filename
@@ -118,24 +111,20 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		sub_row = row.row(align=True)
 		sub_row.enabled = self.pb_filename == "CUSTOM"
 
-		self.pb_filename_blender = bpy.path.basename(bpy.data.filepath) or "playblast"
-		self.pb_filename_render = bpy.path.basename(context.scene.render.filepath) or "playblast"
-		filename = None
+		self.pb_filename_blender = bpy.path.basename(bpy.data.filepath)
+		self.pb_filename_render = bpy.path.basename(context.scene.render.filepath)
 		match self.pb_filename:
 			case "FILE_NAME":
 				sub_row.prop(self, "pb_filename_blender", text="")
-				if not sanity_file_saved.check(bpy.data.filepath):
-					spawn_error(col, "Blend file not saved")
-				
-				filename = self.pb_filename_blender
 			case "RENDER":
 				sub_row.prop(self, "pb_filename_render", text="")
-				filename = self.pb_filename_render or None
 			case "CUSTOM":
 				sub_row.prop(self, "pb_filename_custom", text="")
-				filename = self.pb_filename_custom or None
 
-		if filename is None:
+		filename = self.get_filename()
+		if not saved:
+			spawn_error(col, "Blend file not saved")
+		elif filename is None:
 			spawn_error(col, "Filename is empty")
 		else:
 			valid, msg = sanity_file_stem.check_and_report(filename)

@@ -31,4 +31,4 @@ def valid_file_stem(stem: str) -> bool:
 	if not stem.strip(): return False
 	pattern = r'^(?!.*[\\/:*?"<>|])[^. ].*[^. ]$'
 	return bool(re.match(pattern, stem))
-sanity_file_stem = SanityCheck(lambda stem: valid_file_stem(stem), "Window stem is invalid")
+sanity_file_stem = SanityCheck(lambda stem: valid_file_stem(stem), "file name is invalid")

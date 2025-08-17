@@ -69,6 +69,12 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		default=""
 	)
 
+	pb_path_preview: bpy.props.StringProperty( # type: ignore
+		name="Playblast Path Preview",
+		description="Preview of the playblast output path",
+		default=""
+	)
+
 	def draw(self, context: bpy.types.Context):
 		layout = self.layout
 
@@ -130,6 +136,14 @@ class BP_Preferences(bpy.types.AddonPreferences):
 			valid, msg = sanity_file_stem.check_and_report(filename)
 			if not valid:
 				spawn_error(col, msg)
+
+		preview_path = self.get_path()
+		if preview_path:
+			col.separator_spacer()
+			row = col.row(align=True)
+			row.enabled = False
+			self.pb_path_preview = str(preview_path.resolve())
+			row.prop(self, "pb_path_preview", text="", icon="FOLDER_REDIRECT")
 
 		# endregion
 

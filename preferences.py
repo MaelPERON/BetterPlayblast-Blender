@@ -149,6 +149,16 @@ class BP_Preferences(bpy.types.AddonPreferences):
 
 		# endregion
 
+		# region FILE OUTPUT PATH
+		if self.pb_folder == "RENDER" or self.pb_filename == "RENDER":
+			scene = bpy.context.scene
+			col.separator()
+			row = col.row(align=True).split(factor=0.2)
+			row.label(text="Render Output Path:")
+			row.prop(scene.render, "filepath", text="")
+
+		# endregion
+
 		# region PLAYBLAST FOLDER FORCE
 		col = box.column(align=True)
 		row = col.row().split(align=True, factor=0.6)

@@ -91,7 +91,7 @@ class BP_Preferences(bpy.types.AddonPreferences):
 					spawn_error(col, "Blend file not saved")
 					folder = None
 				else:
-					folder = Path(filepath) / self.pb_folder_relative
+					folder = Path(filepath).parent / self.pb_folder_relative
 
 			case "RENDER":
 				filepath = Path(context.scene.render.filepath)

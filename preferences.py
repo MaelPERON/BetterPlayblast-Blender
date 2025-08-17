@@ -79,7 +79,7 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		# Pre-checks
 		saved = sanity_file_saved.check(bpy.data.filepath)
 
-		# Playblast Folder
+		# region Playblast Folder
 		col = box.column(align=True)
 		row = col.row().split(align=True, factor=0.6)
 		row.prop(self, "pb_folder")
@@ -130,6 +130,8 @@ class BP_Preferences(bpy.types.AddonPreferences):
 			valid, msg = sanity_file_stem.check_and_report(filename)
 			if not valid:
 				spawn_error(col, msg)
+
+		# endregion
 
 	def get_filename(self) -> str | None:
 		match self.pb_filename:

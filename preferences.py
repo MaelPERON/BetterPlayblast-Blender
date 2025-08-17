@@ -40,6 +40,12 @@ class BP_Preferences(bpy.types.AddonPreferences):
 		subtype='DIR_PATH'
 	)
 
+	pb_folder_force: bpy.props.BoolProperty( # type: ignore
+		name="Force Playblast Folder Creation",
+		description="When folder doesn't exist, create it.\nWarning: This may create unwanted folders.",
+		default=False
+	)
+
 	pb_filename: bpy.props.EnumProperty( # type: ignore
 		name="Playblast Filename",
 		description="Choose the filename for playblasts",
@@ -140,6 +146,15 @@ class BP_Preferences(bpy.types.AddonPreferences):
 			valid, msg = sanity_file_stem.check_and_report(filename)
 			if not valid:
 				spawn_error(col, msg)
+
+		# endregion
+
+		# region PLAYBLAST FOLDER FORCE
+		col = box.column(align=True)
+		row = col.row().split(align=True, factor=0.6)
+		row.prop(self, "pb_folder_force")
+		if not folder:
+			row.enabled = False
 
 		# endregion
 

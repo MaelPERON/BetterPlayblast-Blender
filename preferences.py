@@ -199,3 +199,10 @@ class BP_Preferences(bpy.types.AddonPreferences):
 				return self.pb_folder_custom
 			case _:
 				return None
+			
+	def get_path(self) -> Path | None:
+		folder = self.get_folder()
+		filename = self.get_filename()
+		if not folder or not filename:
+			return None
+		return Path(folder) / filename

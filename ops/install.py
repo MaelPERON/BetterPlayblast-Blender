@@ -7,7 +7,6 @@ from ..addon import packages_installed
 from ..BetterPlayblast.install import missing_packages
 
 PYTHON = sys.executable
-SITE_PACKAGES = Path(PYTHON).parent.parent / "lib" / "site-packages"
 
 class BP_PackageInstaller(bpy.types.Operator):
 	bl_idname = "bp.install_missing_packages"
@@ -20,8 +19,8 @@ class BP_PackageInstaller(bpy.types.Operator):
 
 		# In case they're already installed (encourager the user to restart -> better UX)
 		if len(packages) != 0:
-			# Install missing packages (targeting the blender app site-packages)
-			args = [PYTHON, '-m', 'pip', 'install', '--target', str(SITE_PACKAGES), *packages]
+			# Install missing packages (targeting the user site-packages)
+			args = [PYTHON, '-m', 'pip', 'install', '--user', *packages]
 			print(f"Running command: {' '.join(args)}")
 			proc = run(args)
 			try:

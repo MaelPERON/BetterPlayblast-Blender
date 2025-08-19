@@ -3,7 +3,7 @@ import sys
 from importlib import reload, import_module
 from site import getusersitepackages
 
-def reload_pyppeteer():	
+def pyppeteer_reload():	
 	os.putenv("PYPPETEER_CHROMIUM_REVISION", "1230501")
 	try:
 		import pyppeteer.chromium_downloader as pyppeteer_downloader

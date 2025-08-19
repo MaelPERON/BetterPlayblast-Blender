@@ -23,10 +23,10 @@ bl_info = {
 }
 
 from . import auto_load
-from .utils import reload_pyppeteer, add_user_site_packages
+from .utils import pyppeteer_reload, add_user_site_packages
 
 add_user_site_packages()
-reload_pyppeteer()
+pyppeteer_reload()
 
 auto_load.init()
 

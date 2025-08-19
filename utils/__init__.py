@@ -1,6 +1,6 @@
 import os
 import sys
-from importlib import reload
+from importlib import reload, import_module
 from site import getusersitepackages
 
 def reload_pyppeteer():	
@@ -10,6 +10,14 @@ def reload_pyppeteer():
 		reload(pyppeteer_downloader)
 	except:
 		pass
+
+def psutil_import():
+	try:
+		module = import_module("psutil")
+		reload(module)
+		return module
+	except ImportError:
+		return None
 
 def get_user_site_packages() -> str:
 	return str(getusersitepackages())

@@ -1,8 +1,12 @@
 import bpy
 import os
-import psutil
 from . import time
 from datetime import datetime
+
+from ..utils import psutil_import
+
+psutil = psutil_import()
+
 
 def data_init_capture(context: bpy.types.Context) -> dict:
 	"""Initialize data capture for the playblast.
@@ -54,12 +58,6 @@ def data_frame_capture(data: dict, last_check_time: datetime, scene: bpy.types.S
 		dict: The updated data dictionary.
 	"""
 
-	""" MEMORY USAGE """
-	process = psutil.Process()
-	mem_info = process.memory_info()
-	num_threads = process.num_threads()
-	memory_mb = mem_info.rss / (1024 * 1024)
-
 	""" RENDER TIME """
 	now = time.get_now()
 	diff = (now - last_check_time).total_seconds()
@@ -73,12 +71,22 @@ def data_frame_capture(data: dict, last_check_time: datetime, scene: bpy.types.S
 	data["frames"].append({
 		"frame": scene.frame_current,
 		"timecode": time.get_timecode_from_frame(scene.frame_current, data.get("frame_start", 1)),
-		"memory": memory_mb,
 		"camera": camera.name,
 		"lens": lens,
 		"marker": active_marker.name if active_marker else "",
-		"num_threads": num_threads,
 		"render_time": diff
 	})
+
+	""" MEMORY USAGE """
+	if not psutil: psutil = psutil_import() # Import psutil if not already imported
+
+	if psutil:
+		process = psutil.Process()
+		mem_info = process.memory_info()
+		num_threads = process.num_threads()
+		memory_mb = mem_info.rss / (1024 * 1024)
+
+		data["frames"][-1]["memory"] = memory_mb
+		data["frames"][-1]["num_threads"] = num_threads
 
 	return data

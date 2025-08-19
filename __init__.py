@@ -23,7 +23,9 @@ bl_info = {
 }
 
 from . import auto_load
-from .utils import reload_pyppeteer
+from .utils import reload_pyppeteer, add_user_site_packages
+
+add_user_site_packages()
 reload_pyppeteer()
 
 auto_load.init()

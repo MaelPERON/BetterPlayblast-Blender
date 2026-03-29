@@ -66,14 +66,15 @@ class VenvManager():
                           *libraries)
 
     def has_library(self, library: str) -> bool:
-        try:
-            subprocess.check_call(
-                [str(self.python_executable), "-m", "pip", "show", library],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
+        library_path = self.site / library
+        if not library_path.exists():
             return True
-        except subprocess.CalledProcessError:
+
+        try:
+            import importlib.util
+            spec = importlib.util.find_spec(library)
+            return spec is not None
+        except ImportError:
             return False
 
 

@@ -101,4 +101,4 @@ class BP_PackageInstaller(bpy.types.Operator):
 
     def invoke(self, context, event):
         wm = context.window_manager
-        return wm.invoke_props_dialog(self, confirm_text="Install")
+        return wm.invoke_props_dialog(self, width=400, confirm_text="Install")

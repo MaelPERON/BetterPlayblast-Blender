@@ -15,9 +15,13 @@ from ..utils.handlers import remove_function_from_handler
 from ..BetterPlayblast.install import all_installed
 from ..BetterPlayblast.metadata import MetadataList as MList
 
-Playblast = None
-if all_installed(refresh=True, save_cache=False):
-    from ..BetterPlayblast.playblast import Playblast
+
+def get_playblast_class():
+    if all_installed(refresh=True, save_cache=False):
+        from ..BetterPlayblast.playblast import Playblast
+        return Playblast
+    else:
+        return None
 
 
 class BP_Playblast(bpy.types.Operator):
@@ -34,9 +38,10 @@ class BP_Playblast(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context: bpy.types.Context):
-        return Playblast is not None
+        return get_playblast_class() is not None
 
     def execute(self, context: bpy.types.Context):
+        Playblast = get_playblast_class()
         if Playblast is None:
             self.report(
                 {'ERROR'},

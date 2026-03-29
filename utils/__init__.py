@@ -7,10 +7,14 @@ from subprocess import run
 def pyppeteer_reload():	
 	os.putenv("PYPPETEER_CHROMIUM_REVISION", "1230501")
 	try:
-		import pyppeteer.chromium_downloader as pyppeteer_downloader
-		reload(pyppeteer_downloader)
-	except:
-		pass
+	
+def pyppeteer_download():
+	downloader = pyppeteer_import(downloader=True)
+	if not downloader:
+		return None
+
+	if not downloader.check_chromium(): # Check if Chromium is downloaded
+		downloader.download_chromium()
 
 def psutil_import():
 	try:

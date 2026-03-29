@@ -74,3 +74,22 @@ class VenvManager():
             return True
         except subprocess.CalledProcessError:
             return False
+
+
+class VenvLibraries():
+    """Class to manage the required libraries for BetterPlayblast within a virtual environment."""  # noqa: E501
+    def __init__(self, venv_manager: VenvManager, libraries: list[str]):
+        self.venv_manager = venv_manager
+        self.libraries = libraries
+
+    def missing_libraries(self) -> list[str]:
+        return [lib for lib in self.libraries
+                if not self.venv_manager.has_library(lib)]
+
+    def install_missing_libraries(self) -> None:
+        missing = self.missing_libraries()
+        if missing:
+            self.venv_manager.install_library(missing)
+
+    def uninstall_libraries(self) -> None:
+        self.venv_manager.uninstall_library(self.libraries)

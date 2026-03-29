@@ -1,8 +1,8 @@
 import bpy
 import sys
 
-from ..addon import VenvLibraries, packages_installed
-from ..utils import pyppeteer_download
+from ..addon import packages_installed
+from ..utils.pyppeteer import pyppeteer_download
 from ..utils.venv import VenvManager
 from ..BetterPlayblast.install import PACKAGES
 

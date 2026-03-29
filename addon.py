@@ -1,7 +1,7 @@
 import sys
 import os
 from .utils.venv import VenvManager, get_venv_path
-from .utils import chromium_is_installed
+from .utils.pyppeteer import chromium_is_installed
 from .BetterPlayblast.install import all_installed
 
 

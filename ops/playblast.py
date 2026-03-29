@@ -3,7 +3,7 @@ import os
 import json
 from pathlib import Path
 from functools import partial
-from ..utils import pyppeteer_import
+from ..utils.pyppeteer import pyppeteer_import
 from ..utils.render_settings import (
     save_render_settings,
     override_render_settings,

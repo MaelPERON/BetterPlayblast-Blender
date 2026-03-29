@@ -52,6 +52,7 @@ class VenvManager():
 
         self.bin = venv_bin()
         self.python_executable = venv_python_executable()
+        self.site = self.venv_path / "Lib" / "site-packages"
         if not self.python_executable.exists():
             raise FileNotFoundError(f"Python executable not found at {self.python_executable}")  # noqa: E501
 

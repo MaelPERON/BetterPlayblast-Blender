@@ -2,6 +2,7 @@ import os
 import sys
 from importlib import reload, import_module
 from site import getusersitepackages
+from subprocess import run
 
 def pyppeteer_reload():	
 	os.putenv("PYPPETEER_CHROMIUM_REVISION", "1230501")
@@ -26,3 +27,16 @@ def add_user_site_packages():
 	site_packages = get_user_site_packages()
 	if site_packages not in sys.path:
 		sys.path.append(site_packages)
+
+def get_python_executable(version: str = "311") -> str:
+	try:
+		result = run(['where', 'python'], capture_output=True, text=True)
+		if result.returncode != 0: return None
+		result = result.stdout.strip()
+		paths = result.splitlines()
+		for path in paths:
+			if version in path:
+				return path
+	except Exception as e:
+		print(f"Error occurred while getting Python executable: {e}")
+		return None

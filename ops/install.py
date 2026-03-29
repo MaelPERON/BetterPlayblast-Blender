@@ -18,7 +18,7 @@ class BP_PackageInstaller(bpy.types.Operator):
         "*This may cause blender to freeze.*\n"
         "(Open the console first to see the installation progress)"
     )
-    bl_options = {'REGISTER', 'UNDO'}
+    bl_options = {'REGISTER'}
 
     def execute(self, context) -> set[str]:
         packages = list(PACKAGES.keys())

@@ -4,9 +4,14 @@ from importlib import reload, import_module
 from site import getusersitepackages
 from subprocess import run
 
-def pyppeteer_reload():	
+def pyppeteer_import(downloader : bool = False):
 	os.putenv("PYPPETEER_CHROMIUM_REVISION", "1230501")
 	try:
+		module = import_module("pyppeteer") if not downloader else import_module("pyppeteer.chromium_downloader")
+		reload(module)
+		return module
+	except ImportError:
+		return None
 	
 def pyppeteer_download():
 	downloader = pyppeteer_import(downloader=True)

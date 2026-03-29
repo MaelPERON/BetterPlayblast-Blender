@@ -6,7 +6,6 @@ from subprocess import run
 
 
 def pyppeteer_import(downloader: bool = False):
-    os.putenv("PYPPETEER_CHROMIUM_REVISION", "1230501")
     try:
         if downloader:
             module = import_module("pyppeteer.chromium_downloader")
@@ -19,6 +18,7 @@ def pyppeteer_import(downloader: bool = False):
 
 
 def pyppeteer_download():
+    os.environ["PYPPETEER_CHROMIUM_REVISION"] = "1230501"
     downloader = pyppeteer_import(downloader=True)
     if not downloader:
         return None

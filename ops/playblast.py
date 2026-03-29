@@ -3,7 +3,7 @@ import os
 import json
 from pathlib import Path
 from functools import partial
-from ..utils import pyppeteer_reload
+from ..utils import pyppeteer_import
 from ..utils.render_settings import (
     save_render_settings,
     override_render_settings,
@@ -88,13 +88,28 @@ class BP_Playblast(bpy.types.Operator):
         # Restoring render settings
         restore_render_settings(context, render_settings=render_settings)
 
-        pyppeteer_reload()
-        pb = Playblast(
-            video_filepath,
-            json_filepath,
-            metadatas=[
-                MList.DATE,
-                MList.FILE])
+        metadatas = [
+            MList.FILE,
+            MList.FRAME_RANGE,
+            MList.SCENE,
+            MList.MEMORY,
+            MList.RENDER_TIME,
+            MList.RESOLUTION,
+            MList.CAMERA,
+            MList.LENS,
+            MList.MARKER,
+            MList.STRIP,
+            MList.COMMENT,
+            MList.USER,
+            MList.HOSTNAME,
+            MList.DATE,
+            MList.THREADS,
+            MList.MARKER,
+            MList.ICON,
+            MList.FPS
+        ]
+        pyppeteer_import()
+        pb = Playblast(video_filepath, json_filepath, metadatas=metadatas)
         rendered_video = pb.render(preview=self.preview_process)
 
         og_filepath.parent.mkdir(parents=True, exist_ok=True)

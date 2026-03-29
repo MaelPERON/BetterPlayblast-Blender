@@ -333,3 +333,17 @@ class BP_Preferences(bpy.types.AddonPreferences):
         if not folder or not filename:
             return None
         return Path(folder) / filename
+
+
+def register():
+    addon = bpy.context.preferences.addons[__package__
+                                           or "BetterPlayblast-Blender"]
+    preferences: BP_Preferences = addon.preferences
+    preferences.pb_folder = "RELATIVE"
+    preferences.pb_folder = "RENDER"
+    # preferences.pb_folder = "CUSTOM"
+    preferences.pb_filename = "FILE_NAME"
+    preferences.pb_filename = "RENDER"
+    # preferences.pb_filename = "CUSTOM"
+
+    # print(preferences.get_filename(bpy.context))

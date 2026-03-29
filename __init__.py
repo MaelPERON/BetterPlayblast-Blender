@@ -11,8 +11,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from .utils import pyppeteer_reload, add_user_site_packages
+from .tests import pip_show
 from . import auto_load
+
 bl_info = {
     "name": "Betterplayblast",
     "author": "MaelPERON",
@@ -24,9 +25,7 @@ bl_info = {
     "category": "Generic",
 }
 
-
-add_user_site_packages()
-pyppeteer_reload()
+pip_show.main()
 
 auto_load.init()
 

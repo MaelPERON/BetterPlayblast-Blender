@@ -56,7 +56,6 @@ class BP_PackageInstaller(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return True
         return not packages_installed()
 
     def draw(self, context):

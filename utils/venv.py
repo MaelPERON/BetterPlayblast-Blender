@@ -10,15 +10,6 @@ def get_venv_path() -> Path:
     return venv_path
 
 
-def venv_create() -> Path:
-    venv_path = get_venv_path()
-    if not venv_path.exists():
-        builder = venv.EnvBuilder(with_pip=True)
-        builder.create(venv_path)
-
-    return venv_path
-
-
 def venv_bin() -> Path:
     venv_path = get_venv_path()
     if os.name == "nt":
@@ -43,3 +34,32 @@ def parse_library_argument(library: str | list[str]) -> list[str]:
     else:
         raise ValueError("Library argument must be a string or a list of strings.")  # noqa: E501
 
+
+class VenvManager():
+    """Class to manage a virtual environment for BetterPlayblast.\n
+    Ensures the virtual environment is created and provides methods to install
+    and uninstall libraries within it.
+    """
+    def __init__(self):
+        self.venv_path = get_venv_path()
+        if not self.venv_path.exists():
+            builder = venv.EnvBuilder(with_pip=True)
+            builder.create(self.venv_path)
+
+        self.bin = venv_bin()
+        self.python_executable = venv_python_executable()
+        if not self.python_executable.exists():
+            raise FileNotFoundError(f"Python executable not found at {self.python_executable}")  # noqa: E501
+
+    def install_library(self, library: str | list[str]) -> None:
+        libraries = parse_library_argument(library)
+        subprocess.check_call(
+            [str(self.python_executable), "-m", "pip", "install", *libraries]
+        )
+
+    def uninstall_library(self, library: str | list[str]) -> None:
+        libraries = parse_library_argument(library)
+        subprocess.check_call(
+            [str(self.python_executable), "-m", "pip",
+             "uninstall", "-y", *libraries]
+        )

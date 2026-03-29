@@ -26,14 +26,16 @@ def chromium_is_installed() -> bool:
 
     return downloader.check_chromium()
 
+
 def pyppeteer_download():
     downloader = pyppeteer_import(downloader=True)
     if not downloader:
         return None
 
     if not downloader.check_chromium():  # Check if Chromium is downloaded
-        # downloader.download_chromium()
-        print(f"Downloading Chromium revision {downloader.REVISION}...")
+        downloader.download_chromium()
+    else:
+        print("Chromium is already downloaded.")
 
 
 def psutil_import():

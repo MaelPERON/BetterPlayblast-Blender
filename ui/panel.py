@@ -6,6 +6,7 @@ from ..icons import get_icon
 from ..ops.install import BP_PackageInstaller
 from ..ops.playblast import BP_Playblast
 
+
 class BP_MainPanel(bpy.types.Panel):
     bl_label = "Better Playblast"
     bl_idname = "PLAYBLAST_PT_BetterPlayblast"
@@ -16,12 +17,18 @@ class BP_MainPanel(bpy.types.Panel):
         layout = self.layout
         if not packages_installed():
             return self.draw_install(context, layout)
-        
+
         layout.label(text="Ready to use!", icon='FAKE_USER_ON')
         row = layout.row()
-        row.operator(BP_Playblast.bl_idname, text=BP_Playblast.bl_label, icon_value=get_icon("logo_operator"))
+        row.operator(
+            BP_Playblast.bl_idname,
+            text=BP_Playblast.bl_label,
+            icon_value=get_icon("logo_operator"))
 
-    def draw_install(self, context: bpy.types.Context, layout: bpy.types.UILayout):
+    def draw_install(
+            self,
+            context: bpy.types.Context,
+            layout: bpy.types.UILayout):
         box = layout.box()
         row = box.row()
         row.alert = True
@@ -29,9 +36,14 @@ class BP_MainPanel(bpy.types.Panel):
         col.scale_x = 5
         col.label(text="Missing packages!", icon='ERROR')
         col = row.column()
-        col.operator("wm.url_open", text="?").url = "https://example.com/docs" # TODO : replace with actual documentation
+        # TODO : replace with actual documentation
+        col.operator("wm.url_open", text="?").url = "https://example.com/docs"
         row = box.row()
-        row.operator(BP_PackageInstaller.bl_idname, text=BP_PackageInstaller.bl_label, icon='PACKAGE')
+        row.operator(
+            BP_PackageInstaller.bl_idname,
+            text=BP_PackageInstaller.bl_label,
+            icon='PACKAGE')
+
 
 @pop_panel_decorator(BP_MainPanel.bl_idname, icon="logo")
 def pop_panel(): pass
@@ -39,6 +51,7 @@ def pop_panel(): pass
 
 def register():
     bpy.types.VIEW3D_MT_editor_menus.append(pop_panel)
+
 
 def unregister():
     bpy.types.VIEW3D_MT_editor_menus.remove(pop_panel)

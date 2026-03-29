@@ -1,34 +1,51 @@
 from pathlib import Path
 import re
 
+
 class SanityCheck:
-	def __init__(self, check_function: callable = None, error_message: str = None):
-		self.check_function = check_function
-		self.error_message = error_message or "Invalid value"
+    def __init__(
+            self,
+            check_function: callable = None,
+            error_message: str = None):
+        self.check_function = check_function
+        self.error_message = error_message or "Invalid value"
 
-	def check(self, value, *args, **kwargs) -> bool:
-		if not self.check_function:
-			return None
+    def check(self, value, *args, **kwargs) -> bool:
+        if not self.check_function:
+            return None
 
-		return self.check_function(value, *args, **kwargs)
+        return self.check_function(value, *args, **kwargs)
 
-	def check_and_report(self, value, *args, **kwargs):
-		if not self.check_function:
-			return True, None
+    def check_and_report(self, value, *args, **kwargs):
+        if not self.check_function:
+            return True, None
 
-		message = self.error_message
-		for key, value in kwargs.items():
-			message = message.replace(f"${{{key}}}", str(value))
+        message = self.error_message
+        for key, value in kwargs.items():
+            message = message.replace(f"${{{key}}}", str(value))
 
-		return (self.check_function(value, *args, **kwargs), message)
+        return (self.check_function(value, *args, **kwargs), message)
 
 
 # FILE SANITY CHECKS
-sanity_file_saved = SanityCheck(lambda file: file != "", "Blend file not saved")
-sanity_file_exists = SanityCheck(lambda file: (Path(file) if not isinstance(file, Path) else file).resolve().exists(), f"Path not valid")
+sanity_file_saved = SanityCheck(
+    lambda file: file != "",
+    "Blend file not saved")
+sanity_file_exists = SanityCheck(
+    lambda file: (
+        Path(file) if not isinstance(
+            file,
+            Path) else file).resolve().exists(),
+    "Path not valid")
+
 
 def valid_file_stem(stem: str) -> bool:
-	if not stem.strip(): return False
-	pattern = r'^(?!.*[\\/:*?"<>|])[^. ].*[^. ]$'
-	return bool(re.match(pattern, stem))
-sanity_file_stem = SanityCheck(lambda stem: valid_file_stem(stem), "file name is invalid")
+    if not stem.strip():
+        return False
+    pattern = r'^(?!.*[\\/:*?"<>|])[^. ].*[^. ]$'
+    return bool(re.match(pattern, stem))
+
+
+sanity_file_stem = SanityCheck(
+    lambda stem: valid_file_stem(stem),
+    "file name is invalid")

@@ -65,7 +65,8 @@ def iter_submodule_names(path, root=""):
         if is_package:
             sub_path = path / module_name
             sub_root = root + module_name + "."
-            if module_name == "BetterPlayblast": continue
+            if module_name == "BetterPlayblast":
+                continue
             yield from iter_submodule_names(sub_path, sub_root)
         else:
             yield root + module_name
@@ -81,11 +82,17 @@ def get_ordered_classes_to_register(modules):
 
 def get_register_deps_dict(modules):
     my_classes = set(iter_my_classes(modules))
-    my_classes_by_idname = {cls.bl_idname: cls for cls in my_classes if hasattr(cls, "bl_idname")}
+    my_classes_by_idname = {
+        cls.bl_idname: cls for cls in my_classes if hasattr(
+            cls, "bl_idname")}
 
     deps_dict = {}
     for cls in my_classes:
-        deps_dict[cls] = set(iter_my_register_deps(cls, my_classes, my_classes_by_idname))
+        deps_dict[cls] = set(
+            iter_my_register_deps(
+                cls,
+                my_classes,
+                my_classes_by_idname))
     return deps_dict
 
 
@@ -108,7 +115,9 @@ def get_dependency_from_annotation(value):
             return value.keywords.get("type")
     else:
         if isinstance(value, tuple) and len(value) == 2:
-            if value[0] in (bpy.props.PointerProperty, bpy.props.CollectionProperty):
+            if value[0] in (
+                    bpy.props.PointerProperty,
+                    bpy.props.CollectionProperty):
                 return value[1]["type"]
     return None
 
@@ -174,14 +183,17 @@ def toposort(deps_dict):
     sorted_values = set()
     while len(deps_dict) > 0:
         unsorted = []
-        sorted_list_sub = []  # helper for additional sorting by bl_order - in panels
+        # Helper for additional sorting by bl_order in panels.
+        sorted_list_sub = []
         for value, deps in deps_dict.items():
             if len(deps) == 0:
                 sorted_list_sub.append(value)
                 sorted_values.add(value)
             else:
                 unsorted.append(value)
-        deps_dict = {value: deps_dict[value] - sorted_values for value in unsorted}
+        deps_dict = {
+            value: deps_dict[value] -
+            sorted_values for value in unsorted}
         sorted_list_sub.sort(key=lambda cls: getattr(cls, "bl_order", 0))
         sorted_list.extend(sorted_list_sub)
     return sorted_list

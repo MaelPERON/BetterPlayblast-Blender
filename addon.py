@@ -1,3 +1,4 @@
+import sys
 import os
 from .utils.venv import VenvManager, get_venv_path
 from .utils import chromium_is_installed
@@ -21,4 +22,10 @@ def packages_installed() -> bool:
 
 
 def register():
+    if get_venv_path().exists():
+        venv = VenvManager()
+        if venv.site not in sys.path:
+            print(f"Adding {venv.site} to sys.path")
+            sys.path.insert(0, str(get_venv_path() / "Lib" / "site-packages"))
+
     print("BetterPlayblast-Blender: addon reloaded")

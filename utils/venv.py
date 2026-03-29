@@ -77,6 +77,12 @@ class VenvManager():
         except ImportError:
             return False
 
+    def ensure_site(self):
+        import sys
+        if self.site not in sys.path:
+            print(f"Adding {self.site} to sys.path")
+            sys.path.insert(0, str(self.site))
+
 
 class VenvLibraries():
     """Class to manage the required libraries for BetterPlayblast within a virtual environment."""  # noqa: E501

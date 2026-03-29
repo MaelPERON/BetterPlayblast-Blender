@@ -3,7 +3,7 @@ import sys
 
 from ..addon import packages_installed
 from ..utils.pyppeteer import pyppeteer_download
-from ..utils.venv import VenvManager
+from ..utils.venv import VenvManager, get_venv_path
 from ..BetterPlayblast.install import PACKAGES
 
 PYTHON = sys.executable

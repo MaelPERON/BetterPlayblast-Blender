@@ -4,9 +4,11 @@ from pathlib import Path
 from subprocess import CalledProcessError, run
 
 from ..addon import packages_installed
+from ..utils import pyppeteer_import, pyppeteer_download, get_python_executable
 from ..BetterPlayblast.install import missing_packages
 
 PYTHON = sys.executable
+SITE_PACKAGES = bpy.utils.user_resource('SCRIPTS', path="modules")
 
 class BP_PackageInstaller(bpy.types.Operator):
 	bl_idname = "bp.install_missing_packages"
@@ -19,8 +21,15 @@ class BP_PackageInstaller(bpy.types.Operator):
 
 		# In case they're already installed (encourager the user to restart -> better UX)
 		if len(packages) != 0:
+			# Check if python 3.11 is available
+			python_path = get_python_executable("311")
+			if not python_path:
+				self.report({'ERROR'}, "Python 3.11 is not available.")
+				return {'CANCELLED'}
+
 			# Install missing packages (targeting the user site-packages)
-			args = [PYTHON, '-m', 'pip', 'install', '--user', *packages]
+			packages.append("psutil")
+			args = [python_path, '-m', 'pip', 'install', '--user', *packages]
 			print(f"Running command: {' '.join(args)}")
 			proc = run(args)
 			try:
@@ -32,11 +41,8 @@ class BP_PackageInstaller(bpy.types.Operator):
 		else:
 			self.report({'WARNING'}, "All required packages are already installed. Restart Blender to apply changes.")
 
-		pyppeteer_install = run("pyppeteer-install")
-		try:
-			pyppeteer_install.check_returncode()
-		except CalledProcessError as e:
-			self.report({'ERROR'}, str(e))
+		pyppeteer_install = pyppeteer_download()
+		if not pyppeteer_install:
 			self.report({'ERROR'}, f"Failed to install pyppeteer.")
 			return {'CANCELLED'}
 

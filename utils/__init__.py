@@ -1,8 +1,6 @@
 import os
 import sys
 from importlib import reload, import_module
-from site import getusersitepackages
-from subprocess import run
 
 
 def pyppeteer_import(downloader: bool = False):
@@ -17,14 +15,25 @@ def pyppeteer_import(downloader: bool = False):
         return None
 
 
+def pyppeteer_is_installed() -> bool:
+    return pyppeteer_import() is not None
+
+
+def chromium_is_installed() -> bool:
+    downloader = pyppeteer_import(downloader=True)
+    if not downloader:
+        return False
+
+    return downloader.check_chromium()
+
 def pyppeteer_download():
-    os.environ["PYPPETEER_CHROMIUM_REVISION"] = "1230501"
     downloader = pyppeteer_import(downloader=True)
     if not downloader:
         return None
 
     if not downloader.check_chromium():  # Check if Chromium is downloaded
-        downloader.download_chromium()
+        # downloader.download_chromium()
+        print(f"Downloading Chromium revision {downloader.REVISION}...")
 
 
 def psutil_import():

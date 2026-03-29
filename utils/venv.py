@@ -63,3 +63,14 @@ class VenvManager():
             [str(self.python_executable), "-m", "pip",
              "uninstall", "-y", *libraries]
         )
+
+    def has_library(self, library: str) -> bool:
+        try:
+            subprocess.check_call(
+                [str(self.python_executable), "-m", "pip", "show", library],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            return True
+        except subprocess.CalledProcessError:
+            return False

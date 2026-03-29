@@ -34,3 +34,5 @@ def pyppeteer_download():
         downloader.download_chromium()
     else:
         print("Chromium is already downloaded.")
+
+    return True

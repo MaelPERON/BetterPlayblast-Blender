@@ -1,6 +1,6 @@
 import bpy
 import sys
-
+from textwrap import wrap
 from ..addon import packages_installed
 from ..utils.pyppeteer import pyppeteer_download
 from ..utils.venv import VenvManager, get_venv_path
@@ -55,49 +55,56 @@ class BP_PackageInstaller(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
+        return True
         return not packages_installed()
 
     def draw(self, context):
         layout = self.layout
-        layout.label(text="BetterPlayblast requires additional packages to work.")  # noqa: E501
+        layout.label(
+            text="BetterPlayblast requires additional packages.",
+            icon='INFO',
+        )
 
         # Listing the missing packages.
         venv = (VenvManager()
                 if get_venv_path().exists()
                 else None)
 
-        subheader, subbody = layout.panel(idname=f"{self.bl_idname}_packages",
-                                          default_closed=True)
-        subheader.label(text="Required Packages:")
+        subheader, subbody = layout.panel(
+            idname=f"{self.bl_idname}_packages",
+            default_closed=True,
+        )
+        subheader.label(text="Required Packages", icon='PACKAGE')
         for package in PACKAGES.keys():
             if subbody is None:
                 continue
-            box = subbody.box()
+            row = subbody.row(align=True)
             if venv is not None and venv.has_library(package):
-                box.label(text=package, icon="SORTTIME")
+                row.label(text=package, icon="SORTTIME")
             else:
-                box.label(text=package)
+                row.label(text=package, icon='DOT')
 
         # Warning about the installation process.
-        warning_row = layout.row()
-        warning_column = layout.column()
-        warning_column.scale_x = 1.5
-
-        warning_row.alert = True
-        warning_row.label(text="Warning:", icon='WARNING_LARGE')
+        warning_box = layout.box()
+        warning_box.scale_x = 2
+        header = warning_box.row()
+        header.alert = True
+        header.label(text="Before you install", icon='ERROR')
+        warning_column = warning_box.column(align=True)
 
         messages = [
             "The installation process may take a while.",
             "Blender may become unresponsive during installation.",
             "It's recommended to open the console to see the progress.",
-            "After installation, restart Blender to apply changes.",]
+            "After installation, restart Blender to apply changes."
+        ]
 
         for message in messages:
-            row = warning_column.row(align=True)
-            row.label(text="", icon='DOT')
-            box = row.box()
-            box.label(text=message)
-            box.emboss = "NONE"
+            wrapped_lines = wrap(message, width=70)
+            for line_index, line in enumerate(wrapped_lines):
+                row = warning_column.row(align=True)
+                row.label(text="", icon='DOT' if line_index == 0 else 'BLANK1')
+                row.label(text=line)
 
     def invoke(self, context, event):
         wm = context.window_manager

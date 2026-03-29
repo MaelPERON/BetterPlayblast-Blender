@@ -35,6 +35,10 @@ def parse_library_argument(library: str | list[str]) -> list[str]:
         raise ValueError("Library argument must be a string or a list of strings.")  # noqa: E501
 
 
+def start_pip_command(python_executable: Path, *args: str) -> list[str]:
+    return subprocess.check_call([str(python_executable), "-m", "pip", *args])
+
+
 class VenvManager():
     """Class to manage a virtual environment for BetterPlayblast.\n
     Ensures the virtual environment is created and provides methods to install
@@ -53,16 +57,12 @@ class VenvManager():
 
     def install_library(self, library: str | list[str]) -> None:
         libraries = parse_library_argument(library)
-        subprocess.check_call(
-            [str(self.python_executable), "-m", "pip", "install", *libraries]
-        )
+        start_pip_command(self.python_executable, "install", *libraries)
 
     def uninstall_library(self, library: str | list[str]) -> None:
         libraries = parse_library_argument(library)
-        subprocess.check_call(
-            [str(self.python_executable), "-m", "pip",
-             "uninstall", "-y", *libraries]
-        )
+        start_pip_command(self.python_executable, "uninstall", "-y",
+                          *libraries)
 
     def has_library(self, library: str) -> bool:
         try:

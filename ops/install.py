@@ -51,6 +51,7 @@ class BP_PackageInstaller(bpy.types.Operator):
                 "Restart Blender to apply changes."
             ),
         )
+        self._show_restart_popup(context)
         return {'FINISHED'}
 
     @classmethod
@@ -105,6 +106,19 @@ class BP_PackageInstaller(bpy.types.Operator):
                 row = warning_column.row(align=True)
                 row.label(text="", icon='DOT' if line_index == 0 else 'BLANK1')
                 row.label(text=line)
+
+    def _show_restart_popup(self, context):
+        def draw_popup(self, context):
+            layout: bpy.types.UILayout = self.layout
+
+            layout.label(text="Installation complete!"
+                         "Please restart Blender to apply changes.")
+
+        bpy.context.window_manager.popup_menu(
+            draw_popup,
+            title="Restart Required",
+            icon='INFO',
+        )
 
     def invoke(self, context, event):
         wm = context.window_manager

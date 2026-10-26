@@ -77,6 +77,9 @@ def restore_render_settings(context: bpy.types.Context,
 			render_settings (dict[str, dict]): The saved render settings.
 			pickle_file (Path): The path to the saved settings file.
 	"""
+	if render_settings is None:
+		render_settings = {}
+
 	if pickle_file and pickle_file.exists():
 		with open(pickle_file, "rb") as f:
 			render_settings = pickle.load(f)

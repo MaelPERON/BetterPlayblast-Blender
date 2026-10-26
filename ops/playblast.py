@@ -393,22 +393,25 @@ class BP_OT_playblast(bpy.types.Operator):
                     self.report({'WARNING'}, "Could not open video player")
 
             # Restore render settings
-            r = scene.render
-            r.filepath                       = saved_settings['filepath']
-            r.resolution_percentage          = saved_settings['resolution_percentage']
-            scene.frame_start                = saved_settings['frame_start']
-            scene.frame_end                  = saved_settings['frame_end']
-            r.fps                            = saved_settings['fps']
-            r.image_settings.file_format     = saved_settings['file_format']
-            r.image_settings.color_mode      = saved_settings['color_mode']
-            r.ffmpeg.format                  = saved_settings['ffmpeg_format']
-            r.ffmpeg.codec                   = saved_settings['ffmpeg_codec']
-            r.ffmpeg.audio_codec             = saved_settings['ffmpeg_audio_codec']
-            r.ffmpeg.gopsize                 = saved_settings['ffmpeg_gopsize']
-            r.ffmpeg.video_bitrate           = saved_settings['ffmpeg_video_bitrate']
-            r.ffmpeg.maxrate                 = saved_settings['ffmpeg_maxrate']
-            r.ffmpeg.minrate                 = saved_settings['ffmpeg_minrate']
-            r.ffmpeg.use_max_b_frames        = saved_settings['ffmpeg_use_max_b_frames']
+            try:
+                r = scene.render
+                r.filepath                       = saved_settings['filepath']
+                r.resolution_percentage          = saved_settings['resolution_percentage']
+                scene.frame_start                = saved_settings['frame_start']
+                scene.frame_end                  = saved_settings['frame_end']
+                r.fps                            = saved_settings['fps']
+                r.image_settings.file_format     = saved_settings['file_format']
+                r.image_settings.color_mode      = saved_settings['color_mode']
+                r.ffmpeg.format                  = saved_settings['ffmpeg_format']
+                r.ffmpeg.codec                   = saved_settings['ffmpeg_codec']
+                r.ffmpeg.audio_codec             = saved_settings['ffmpeg_audio_codec']
+                r.ffmpeg.gopsize                 = saved_settings['ffmpeg_gopsize']
+                r.ffmpeg.video_bitrate           = saved_settings['ffmpeg_video_bitrate']
+                r.ffmpeg.maxrate                 = saved_settings['ffmpeg_maxrate']
+                r.ffmpeg.minrate                 = saved_settings['ffmpeg_minrate']
+                r.ffmpeg.use_max_b_frames        = saved_settings['ffmpeg_use_max_b_frames']
+            except TypeError as e:
+                self.report({'WARNING'}, f"Could not restore render settings: {str(e)}")
 
             # Restore viewport shading
             if 'shading_type' in saved_settings:

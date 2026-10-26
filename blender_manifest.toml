@@ -1,10 +1,10 @@
-schema_version = "0.5.0"
+schema_version = "1.0.0"
 
 id = "betterplayblast"
-version = "0.5.0"
+version = "2.0.5"
 name = "Betterplayblast"
 tagline = "Blender addon integrating BetterPlayblast"
-maintainer = "MaelPERON"
+maintainer = "Mael Peron; Corentin Bileau"
 type = "add-on"
 
 website = "https://github.com/MaelPERON/BetterPlayblast-Blender"
@@ -12,17 +12,15 @@ tags = ["Animation", "Sequencer", "Pipeline"]
 
 blender_version_min = "4.2.0"
 
-# License conforming to https://spdx.org/licenses/ (use "SPDX: prefix)
-# https://docs.blender.org/manual/en/dev/advanced/extensions/licenses.html
 license = [
   "SPDX:GPL-3.0-or-later",
 ]
+
 copyright = [
-  "2025 Maël PERON"
+  "2025 Mael Peron",
+  "2025 Corentin Bileau",
 ]
 
-platforms = ["windows-x64", "macos-arm64", "linux-x64"]
-
 [permissions]
-network = "Need to download the needed python libraries"
-files = "Write/Read video and json files"
+network = "Required to download Python dependencies"
+files = "Read and write video and JSON files"

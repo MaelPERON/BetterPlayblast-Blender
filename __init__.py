@@ -13,11 +13,11 @@
 
 bl_info = {
     "name": "Betterplayblast",
-    "author": "MaelPERON",
-    "description": "Blender addon integrating BetterPlayblast",
+    "author": "Mael Peron, Corentin Bileau",
+    "description": "Blender addon integrating BetterPlayblast (+ Easy Playblast features)",
     "blender": (4, 2, 0),
-    "version": (0, 5, 0),
-    "location": "",
+    "version": (2, 0, 7),
+    "location": "3D View > Header",
     "warning": "",
     "category": "Generic",
 }

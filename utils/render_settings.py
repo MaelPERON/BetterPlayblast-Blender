@@ -2,15 +2,16 @@ import bpy
 import pickle
 from pathlib import Path
 
-def save_render_settings(context: bpy.types.Context, filepath: Path) -> dict[str, dict]:
+def save_render_settings(context: bpy.types.Context,
+						 filepath: Path) -> dict[str, dict]:
 	"""Save the current render settings to a file.
 
 	Args:
-		context (bpy.types.Context): The Blender context.
-		filepath (Path): The path to the file where the settings will be saved.
+			context (bpy.types.Context): The Blender context.
+			filepath (Path): The path to the file where settings are saved.
 
 	Returns:
-		dict[str, dict]: The saved render settings.
+			dict[str, dict]: The saved render settings.
 	"""
 
 	render_settings = {
@@ -23,7 +24,9 @@ def save_render_settings(context: bpy.types.Context, filepath: Path) -> dict[str
 			'format': context.scene.render.ffmpeg.format,
 			'codec': context.scene.render.ffmpeg.codec,
 			'gopsize': context.scene.render.ffmpeg.gopsize,
-			'use_max_b_frames': context.scene.render.ffmpeg.use_max_b_frames,
+			'use_max_b_frames': (
+				context.scene.render.ffmpeg.use_max_b_frames
+			),
 			'video_bitrate': context.scene.render.ffmpeg.video_bitrate,
 			'maxrate': context.scene.render.ffmpeg.maxrate,
 			'minrate': context.scene.render.ffmpeg.minrate,
@@ -32,14 +35,15 @@ def save_render_settings(context: bpy.types.Context, filepath: Path) -> dict[str
 			'muxrate': context.scene.render.ffmpeg.muxrate,
 		}
 	}
-	with open(filepath, "wb") as f: pickle.dump(render_settings, f) # Save .pkl file
+	with open(filepath, "wb") as f:
+		pickle.dump(render_settings, f)  # Save .pkl file
 	return render_settings
 
 def override_render_settings(context: bpy.types.Context):
 	"""Override the render settings for the playblast.
 
 	Args:
-		context (bpy.types.Context): The Blender context.
+			context (bpy.types.Context): The Blender context.
 	"""
 	is_ntsc = (context.scene.render.fps != 25)
 
@@ -61,13 +65,17 @@ def override_render_settings(context: bpy.types.Context):
 	context.scene.render.ffmpeg.packetsize = 2048
 	context.scene.render.ffmpeg.muxrate = 10080000
 
-def restore_render_settings(context: bpy.types.Context, render_settings: dict[str, dict] = {}, pickle_file: Path = None):
+
+def restore_render_settings(context: bpy.types.Context,
+							render_settings: dict[str,
+												  dict] | None = None,
+							pickle_file: Path = None):
 	"""Restore the render settings from a saved file.
 
 	Args:
-		context (bpy.types.Context): The Blender context.
-		render_settings (dict[str, dict]): The saved render settings.
-		pickle_file (Path): The path to the saved settings file.
+			context (bpy.types.Context): The Blender context.
+			render_settings (dict[str, dict]): The saved render settings.
+			pickle_file (Path): The path to the saved settings file.
 	"""
 	if pickle_file and pickle_file.exists():
 		with open(pickle_file, "rb") as f:

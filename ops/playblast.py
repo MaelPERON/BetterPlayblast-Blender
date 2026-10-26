@@ -123,7 +123,7 @@ class BP_OT_playblast(bpy.types.Operator):
     _timer = None
     _rendering = False
 
-    comment: bpy.props.StringProperty(name="Comment", default="")
+    comment: bpy.props.StringProperty(name="Comment", default="")  # type: ignore
 
     @classmethod
     def poll(cls, context):

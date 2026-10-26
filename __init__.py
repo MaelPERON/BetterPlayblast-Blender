@@ -11,6 +11,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+from . import auto_load
+from .quick_settings import BP_QuickSettings
+import bpy
+from bpy.props import PointerProperty
+
 bl_info = {
     "name": "Betterplayblast",
     "author": "Mael Peron, Corentin Bileau",
@@ -22,16 +27,15 @@ bl_info = {
     "category": "Generic",
 }
 
-from . import auto_load
-from .utils import reload_pyppeteer
-reload_pyppeteer()
-
 auto_load.init()
 
 
 def register():
     auto_load.register()
+    # BP_QuickSettings is auto-registered by auto_load, just add the scene property
+    bpy.types.Scene.bp_quick_settings = PointerProperty(type=BP_QuickSettings)
 
 
 def unregister():
     auto_load.unregister()
+    del bpy.types.Scene.bp_quick_settings

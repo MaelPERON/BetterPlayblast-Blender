@@ -17,6 +17,7 @@ def save_render_settings(context: bpy.types.Context,
 	render_settings = {
 		'filepath': context.scene.render.filepath,
 		'image_settings': {
+			'media_type': context.scene.render.image_settings.media_type,
 			'file_format': context.scene.render.image_settings.file_format,
 			'color_mode': context.scene.render.image_settings.color_mode,
 		},
@@ -89,6 +90,10 @@ def restore_render_settings(context: bpy.types.Context,
 	image_settings = render_settings.get('image_settings', {})
 	ffmpeg_settings = render_settings.get('ffmpeg', {})
 
+	if context.scene.render.image_settings.media_type:	
+		context.scene.render.image_settings.media_type = image_settings.get(
+			'media_type', 'VIDEO'
+		)
 	context.scene.render.image_settings.file_format = image_settings.get(
 		'file_format', 'PNG'
 	)

@@ -82,7 +82,7 @@ def data_frame_capture(
 
     """ BLENDER INFOS """
     camera = scene.camera
-    lens = camera.data.lens
+    lens = camera.data.lens if camera else None
     markers = [m for m in scene.timeline_markers if m.frame <=
                scene.frame_current]
     active_marker = next(reversed(markers), None)
@@ -93,9 +93,9 @@ def data_frame_capture(
             scene.frame_current,
             data.get("frame_start", 1),
         ),
-        "camera": camera.name,
-        "lens": lens,
-        "marker": active_marker.name if active_marker else "",
+        "camera": camera.name if camera else "N/A",
+        "lens": lens if camera else "N/A",
+        "marker": active_marker.name if active_marker else "N/A",
         "render_time": diff
     })
 

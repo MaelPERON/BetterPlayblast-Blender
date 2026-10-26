@@ -84,17 +84,36 @@ def restore_render_settings(context: bpy.types.Context,
 		with open(pickle_file, "rb") as f:
 			render_settings = pickle.load(f)
 
-	context.scene.render.filepath = render_settings.get('filepath', context.scene.render.filepath)
-	context.scene.render.image_settings.file_format = render_settings['image_settings'].get('file_format', 'PNG')
-	context.scene.render.image_settings.color_mode = render_settings['image_settings'].get('color_mode', 'RGBA')
+	context.scene.render.filepath = render_settings.get(
+		'filepath', context.scene.render.filepath)
+	image_settings = render_settings.get('image_settings', {})
+	ffmpeg_settings = render_settings.get('ffmpeg', {})
 
-	context.scene.render.ffmpeg.format = render_settings['ffmpeg'].get('format', 'MPEG4')
-	context.scene.render.ffmpeg.codec = render_settings['ffmpeg'].get('codec', 'H264')
-	context.scene.render.ffmpeg.gopsize = render_settings['ffmpeg'].get('gopsize', 15)
-	context.scene.render.ffmpeg.use_max_b_frames = render_settings['ffmpeg'].get('use_max_b_frames', False)
-	context.scene.render.ffmpeg.video_bitrate = render_settings['ffmpeg'].get('video_bitrate', 6000)
-	context.scene.render.ffmpeg.maxrate = render_settings['ffmpeg'].get('maxrate', 9000)
-	context.scene.render.ffmpeg.minrate = render_settings['ffmpeg'].get('minrate', 0)
-	context.scene.render.ffmpeg.buffersize = render_settings['ffmpeg'].get('buffersize', 224 * 8)
-	context.scene.render.ffmpeg.packetsize = render_settings['ffmpeg'].get('packetsize', 2048)
-	context.scene.render.ffmpeg.muxrate = render_settings['ffmpeg'].get('muxrate', 10080000)
+	context.scene.render.image_settings.file_format = image_settings.get(
+		'file_format', 'PNG'
+	)
+	context.scene.render.image_settings.color_mode = image_settings.get(
+		'color_mode', 'RGBA'
+	)
+
+	context.scene.render.ffmpeg.format = ffmpeg_settings.get(
+		'format', 'MPEG4')
+	context.scene.render.ffmpeg.codec = ffmpeg_settings.get(
+		'codec', 'H264')
+	context.scene.render.ffmpeg.gopsize = ffmpeg_settings.get(
+		'gopsize', 15)
+	context.scene.render.ffmpeg.use_max_b_frames = ffmpeg_settings.get(
+		'use_max_b_frames', False)
+	context.scene.render.ffmpeg.video_bitrate = ffmpeg_settings.get(
+		'video_bitrate', 6000)
+	context.scene.render.ffmpeg.maxrate = ffmpeg_settings.get(
+		'maxrate', 9000)
+	context.scene.render.ffmpeg.minrate = ffmpeg_settings.get(
+		'minrate', 0)
+	context.scene.render.ffmpeg.buffersize = ffmpeg_settings.get(
+		'buffersize', 224 * 8)
+	context.scene.render.ffmpeg.packetsize = ffmpeg_settings.get(
+		'packetsize', 2048)
+	context.scene.render.ffmpeg.muxrate = (
+		ffmpeg_settings.get('muxrate', 10080000)
+	)

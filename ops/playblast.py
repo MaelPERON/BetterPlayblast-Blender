@@ -66,6 +66,8 @@ def setup_render_settings_for_playblast(context, video_filepath):
 
     # ── Video format — write exactly what Blender's Output panel uses ─────────
     # scene.render.image_settings.file_format : 'FFMPEG' | 'AVI_JPEG' | 'AVI_RAW'
+    if scene.render.image_settings.media_type:
+        scene.render.image_settings.media_type = 'VIDEO'
     scene.render.image_settings.file_format = prefs.file_format
 
     if prefs.file_format == 'FFMPEG':

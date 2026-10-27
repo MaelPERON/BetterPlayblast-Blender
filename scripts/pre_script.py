@@ -1,6 +1,6 @@
 import bpy
 
-def before_playblast(context: bpy.types.Context):
+def before_playblast(context: bpy.types.Context, comment: str):
     """
     This function is intended to be called before the playblast operation is executed.
     It can be used to perform any pre-processing tasks, such as setting up the scene,
@@ -8,6 +8,7 @@ def before_playblast(context: bpy.types.Context):
 
     Args:
         context (bpy.types.Context): The Blender context in which the playblast will be executed.
+        comment (str): The comment provided by the user for the playblast.
     """
     # TODO: Implement any pre-playblast logic here.
     pass

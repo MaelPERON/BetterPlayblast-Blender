@@ -142,21 +142,21 @@ class BP_OT_playblast(bpy.types.Operator):
     def draw(self, context):
         self.layout.prop(self, "comment", text="Comment")
 
-    def run_pre_script(self, context):
+    def run_pre_script(self, context, comment):
         prefs = get_addon_preferences()
         if prefs and prefs.pre_script_path:
             try:
                 pre_script = Script(prefs.pre_script_path)
-                pre_script.run("before_playblast", context)
+                pre_script.run("before_playblast", context, comment)
             except Exception as e:
                 self.report({'ERROR'}, f"Pre-script execution failed: {str(e)}")
 
-    def run_post_script(self, context, final_path):
+    def run_post_script(self, context, final_path, comment):
         prefs = get_addon_preferences()
         if prefs and prefs.post_script_path:
             try:
                 post_script = Script(prefs.post_script_path)
-                post_script.run("after_playblast", context, str(final_path))
+                post_script.run("after_playblast", context, str(final_path), comment)
             except Exception as e:
                 self.report({'ERROR'}, f"Post-script execution failed: {str(e)}")
 
@@ -175,7 +175,7 @@ class BP_OT_playblast(bpy.types.Operator):
             self.report({'ERROR'}, "Please save your .blend file first!")
             return {'CANCELLED'}
 
-        self.run_pre_script(context)
+        self.run_pre_script(context, self.comment)
         try:
             # Create temporary folder for rendering
             temp_folder = Path(tempfile.gettempdir()) / "BetterPlayblast"
@@ -443,11 +443,12 @@ class BP_OT_playblast(bpy.types.Operator):
                                 space.shading.type = saved_settings['shading_type']
                                 break
 
+            self.run_post_script(context, final_path, comment=self.comment)
+            self.report({'INFO'}, f"Playblast saved: {final_path.name}")
+
             # Reset comment for next playblast
             self.comment = ""
 
-            self.report({'INFO'}, f"Playblast saved: {final_path.name}")
-            self.run_post_script(context, final_path)
             return {'FINISHED'}
 
         except Exception as e:

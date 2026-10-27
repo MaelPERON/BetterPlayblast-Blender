@@ -6,6 +6,8 @@ import json
 import tempfile
 from pathlib import Path
 from functools import partial
+
+from ..utils.scripts import Script
 from ..utils.pyppeteer import pyppeteer_import
 from ..utils.capture_data import data_init_capture, data_frame_capture
 from ..utils.time import get_now
@@ -140,6 +142,24 @@ class BP_OT_playblast(bpy.types.Operator):
     def draw(self, context):
         self.layout.prop(self, "comment", text="Comment")
 
+    def run_pre_script(self, context):
+        prefs = get_addon_preferences()
+        if prefs and prefs.pre_script_path:
+            try:
+                pre_script = Script(prefs.pre_script_path)
+                pre_script.run("before_playblast", context)
+            except Exception as e:
+                self.report({'ERROR'}, f"Pre-script execution failed: {str(e)}")
+
+    def run_post_script(self, context, final_path):
+        prefs = get_addon_preferences()
+        if prefs and prefs.post_script_path:
+            try:
+                post_script = Script(prefs.post_script_path)
+                post_script.run("after_playblast", context, str(final_path))
+            except Exception as e:
+                self.report({'ERROR'}, f"Post-script execution failed: {str(e)}")
+
     def execute(self, context):
         prefs = get_addon_preferences()
         if not prefs:
@@ -155,6 +175,7 @@ class BP_OT_playblast(bpy.types.Operator):
             self.report({'ERROR'}, "Please save your .blend file first!")
             return {'CANCELLED'}
 
+        self.run_pre_script(context)
         try:
             # Create temporary folder for rendering
             temp_folder = Path(tempfile.gettempdir()) / "BetterPlayblast"
@@ -426,6 +447,7 @@ class BP_OT_playblast(bpy.types.Operator):
             self.comment = ""
 
             self.report({'INFO'}, f"Playblast saved: {final_path.name}")
+            self.run_post_script(context, final_path)
             return {'FINISHED'}
 
         except Exception as e:

@@ -183,12 +183,12 @@ class BP_Preferences(bpy.types.AddonPreferences):
         default="{user} | {date} | {time}"
     )
 
-    overlay_font_size: bpy.props.IntProperty(  # type: ignore
+    overlay_logo_size: bpy.props.FloatProperty(  # type: ignore
         name="Font Size",
         description="Overlay text font size",
-        default=24,
-        min=8,
-        max=72
+        default=1.25,
+        min=0.1,
+        max=10.0
     )
 
     overlay_margin: bpy.props.IntProperty(  # type: ignore
@@ -226,6 +226,9 @@ class BP_Preferences(bpy.types.AddonPreferences):
         step=0.05,
         subtype='FACTOR'
     )
+
+    overlay_custom_logo:      bpy.props.StringProperty(name="Custom Logo Path",
+                                                       default="", subtype='FILE_PATH')  # type: ignore
 
     # ── Tab selector ───────────────────────────────────────────────────────────
     prefs_tab: bpy.props.EnumProperty(  # type: ignore
@@ -334,25 +337,26 @@ class BP_Preferences(bpy.types.AddonPreferences):
         # ─── Custom Layout ────────────────────────────────────────────────────
         # TEMPORARILY DISABLED - Coming in a future version
         box2 = layout.box()
-        box2.label(text="Custom Layout (Coming Soon)", icon='OVERLAY')
+        box2.label(text="Custom Layout (More Features Coming Soon)", icon='OVERLAY')
         col = box2.column(align=True)
-        col.enabled = False
-        col.label(text="Position Configuration:", icon='LINENUMBERS_ON')
-        col.prop(self, "overlay_top_left",      text="Top Left")
-        col.prop(self, "overlay_top_center",    text="Top Center")
-        col.prop(self, "overlay_top_right",     text="Top Right")
+        col.enabled = True
+        # col.label(text="Position Configuration:", icon='LINENUMBERS_ON')
+        # col.prop(self, "overlay_top_left",      text="Top Left")
+        # col.prop(self, "overlay_top_center",    text="Top Center")
+        # col.prop(self, "overlay_top_right",     text="Top Right")
         col.separator(factor=0.5)
-        col.prop(self, "overlay_bottom_left",   text="Bottom Left")
-        col.prop(self, "overlay_bottom_center", text="Bottom Center")
-        col.prop(self, "overlay_bottom_right",  text="Bottom Right")
+        # col.prop(self, "overlay_bottom_left",   text="Bottom Left")
+        # col.prop(self, "overlay_bottom_center", text="Bottom Center")
+        # col.prop(self, "overlay_bottom_right",  text="Bottom Right")
 
         col.separator(factor=0.5)
         col.label(text="Appearance:", icon='OVERLAY')
-        col.prop(self, "overlay_font_size", text="Font Size")
-        col.prop(self, "overlay_margin",    text="Margin")
+        col.prop(self, "overlay_logo_size", text="Font Size (in rem)")
+        # col.prop(self, "overlay_margin",    text="Margin")
         col.prop(self, "overlay_text_color", text="Text Color")
-        col.prop(self, "overlay_bg_color",   text="Background Color")
-        col.prop(self, "overlay_opacity",    text="Opacity")
+        # col.prop(self, "overlay_bg_color",   text="Background Color")
+        # col.prop(self, "overlay_opacity",    text="Opacity")
+        col.prop(self, "overlay_custom_logo", text="Custom Logo")
 
         # ─── Available Placeholders ───────────────────────────────────────────
         box3 = layout.box()

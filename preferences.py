@@ -30,6 +30,14 @@ class BP_Preferences(bpy.types.AddonPreferences):
     )
     include_version_number: bpy.props.BoolProperty(name="Include Version Number", default=False)  # type: ignore
     custom_playblast_name:  bpy.props.StringProperty(name="Custom Name", default="playblast")  # type: ignore
+    pre_script_path: bpy.props.StringProperty(  # type: ignore
+        name="Pre-Script Path",
+        default=f"{__file__}\\..\\scripts\\pre_script.py",
+        subtype='FILE_PATH')
+    post_script_path: bpy.props.StringProperty(  # type: ignore
+        name="Post-Script Path",
+        default=f"{__file__}\\..\\scripts\\post_script.py",
+        subtype='FILE_PATH')
 
     # ── Video ──────────────────────────────────────────────────────────────────
     file_format: bpy.props.EnumProperty(  # type: ignore
@@ -270,6 +278,11 @@ class BP_Preferences(bpy.types.AddonPreferences):
             box2.prop(self, "custom_playblast_name", text="Name")
         else:
             box2.prop(self, "include_version_number")
+
+        box3 = layout.box()
+        box3.label(text="Pre/Post Scripts", icon='SCRIPT')
+        box3.prop(self, "pre_script_path", text="Pre-Script")
+        box3.prop(self, "post_script_path", text="Post-Script")
 
     def _draw_video(self, layout):
         box = layout.box()

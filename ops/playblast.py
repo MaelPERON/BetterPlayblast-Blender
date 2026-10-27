@@ -6,6 +6,7 @@ import json
 import tempfile
 from pathlib import Path
 from functools import partial
+from mathutils import Color
 
 from ..utils.scripts import Script
 from ..utils.pyppeteer import pyppeteer_import
@@ -376,6 +377,14 @@ class BP_OT_playblast(bpy.types.Operator):
 
             # Build overlay options (use default HTML layout)
             overlay_opts = {}
+
+            if prefs:
+                if prefs.overlay_custom_logo and os.path.isfile(prefs.overlay_custom_logo):
+                    overlay_opts["custom_logo"] = prefs.overlay_custom_logo
+                overlay_opts["logo_size"] = f"{prefs.overlay_logo_size}rem"
+
+                color: Color = prefs.overlay_text_color
+                overlay_opts["note_color"] = f"rgb({int(color.r * 255)}, {int(color.g * 255)}, {int(color.b * 255)})"
 
             # show_icons applies to the default HTML layout
             if qs:
